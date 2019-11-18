@@ -4,8 +4,8 @@ include irvine16.inc
 .data
 	msg1 db "1. Which two team was newly promoted BPL 2016?: $"
 	qsn1 db "a. Dhaka,Rajshahi            b. Khulna ,Rangpor      c. Khulna,Rajshahi: $"
-	rht1 db " Your answer is right: $"
-	wrn1 db " Your answer is wrong:$" 
+	right_answer db " Your answer is right: $"
+	wrong_answer db " Your answer is wrong:$" 
 
 	;////////////////////////////////////////
 .code
@@ -40,8 +40,26 @@ include irvine16.inc
 	
 	
 	;------------user input ------------------
-	;mov ah,1
-	;int 21h
+	mov ah,1
+	int 21h
+		;-----------new line + next line----------------------------
+		mov ah,2
+		mov dl,0ah
+		int 21h
+		mov dl,0dh
+		int 21h
+		mov dl,0dh
+		int 21h
+	;----------------------------------------------------------
+	
+	
+	cmp al,'c'
+	je	ri_a			;jump if equal
+	
+	ri_a:
+		mov ah,9
+		mov dx,offset right_answer
+		int 21h
 		
 	
 main endp
