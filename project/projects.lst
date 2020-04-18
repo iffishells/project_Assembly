@@ -1,0 +1,3116 @@
+Microsoft (R) Macro Assembler Version 6.15.8803		    02/06/20 18:20:10
+projects.asm						     Page 1 - 1
+
+
+				include irvine16.inc
+			      C .NOLIST
+			      C 
+			      C 
+				include headerfile.inc
+			      C print macro p1
+			      C 	MOV DX,OFFSET p1
+			      C 	MOV AH,9
+			      C 	int 21h
+			      C endm
+			      C 
+			      C 
+			      C newline macro p2
+			      C 	mov ah,2
+			      C 	mov dl,0ah
+			      C 	int 21h
+			      C 	mov dl,0dh
+			      C 	int 21h
+			      C 	mov dl,0dh
+			      C 	int 21h
+			      C endm
+			      C 
+			      C input macro p3
+			      C 	mov ah,1
+			      C 	int 21h
+			      C endm
+			      C 
+			      C programe_exit macro p4
+			      C 	mov ah,4ch
+			      C 	int 21h
+			      C endm
+			      C 
+				include Header_mouse.inc
+			      C call_Mouse macro p1
+			      C 	push ax
+			      C 		mov ax,0001h   ;ax=000 mouse initilization
+			      C 		int 33h			;ax=001 show mouse position
+			      C 		
+			      C 		
+			      C 		Level:
+			      C 			mov ax,0005h
+			      C 			mov bx,0
+			      C 			int 33h
+			      C 			
+			      C 		cmp ax,1
+			      C 		jne level
+			      C 		
+			      C 		pop ax
+			      C endm
+			      C 
+ 0000				.data
+ 0000 31 2E 20 32 2B 35			Quest1 db "1. 2+5 =  ? $"
+       20 3D 20 20 3F 20
+       24
+ 000D 61 2E 20 38 20 20			Mcq_Quest1 db "a. 8            b. -1      c. 7 $";,;0dh,0ah
+       20 20 20 20 20 20
+       20 20 20 20 62 2E
+       20 2D 31 20 20 20
+       20 20 20 63 2E 20
+       37 20 24
+					
+					
+ 002E 32 2E 20 35 2B 35			Quest2 db "2. 5+5 = ? $"
+       20 3D 20 3F 20 24
+ 003A 61 2E 20 30 20 20			Mcq_Quest2 db "a. 0            b. 10      c. 100 $";,;0dh,0ah
+       20 20 20 20 20 20
+       20 20 20 20 62 2E
+       20 31 30 20 20 20
+       20 20 20 63 2E 20
+       31 30 30 20 24
+
+ 005D 33 2E 20 31 2D 31			Quest3 db "3. 1-1 = ?  $"
+       20 3D 20 3F 20 20
+       24
+ 006A 61 2E 20 30 20 20			Mcq_Quest3 db "a. 0            b. +6      c. +10 $";,;0dh,0ah
+       20 20 20 20 20 20
+       20 20 20 20 62 2E
+       20 2B 36 20 20 20
+       20 20 20 63 2E 20
+       2B 31 30 20 24
+
+ 008D 34 2E 20 31 30 2B			Quest4 db "4. 10+10 = ? $"
+       31 30 20 3D 20 3F
+       20 24
+ 009B 61 2E 20 32 30 20			Mcq_Quest4 db "a. 20            b. 30      c. 40 $";,;0dh,0ah
+       20 20 20 20 20 20
+       20 20 20 20 20 62
+       2E 20 33 30 20 20
+       20 20 20 20 63 2E
+       20 34 30 20 24
+
+ 00BE 35 2E 20 32 30 2B			Quest5 db "5. 20+30 =  ? $"
+       33 30 20 3D 20 20
+       3F 20 24
+ 00CD 61 2E 20 32 30 20			Mcq_Quest5 db "a. 20            b. 50      c. 70 $";,;0dh,0ah
+       20 20 20 20 20 20
+       20 20 20 20 20 62
+       2E 20 35 30 20 20
+       20 20 20 20 63 2E
+       20 37 30 20 24
+
+ 00F0 36 2E 20 31 30 30			Quest6 db "6. 100-9 = ? $"
+       2D 39 20 3D 20 3F
+       20 24
+ 00FE 61 2E 20 39 31 20			Mcq_Quest6 db "a. 91            b. 50      c. 88 $";,;0dh,0ah
+       20 20 20 20 20 20
+       20 20 20 20 20 62
+       2E 20 35 30 20 20
+       20 20 20 20 63 2E
+       20 38 38 20 24
+
+ 0121 37 2E 20 34 35 2D			Quest7 db "7. 45-5 = ? $"
+       35 20 3D 20 3F 20
+       24
+ 012E 61 2E 20 34 30 20			Mcq_Quest7 db "a. 40            b. 65      c. 85 $";,;0dh,0ah
+       20 20 20 20 20 20
+       20 20 20 20 20 62
+       2E 20 36 35 20 20
+       20 20 20 20 63 2E
+       20 38 35 20 24
+
+ 0151 38 2E 20 39 2B 36			Quest8 db "8. 9+6 = ?  $"
+       20 3D 20 3F 20 20
+       24
+ 015E 61 2E 20 31 34 20			Mcq_Quest8 db "a. 14            b. 96      c. 10 $";,;0dh,0ah
+       20 20 20 20 20 20
+       20 20 20 20 20 62
+       2E 20 39 36 20 20
+       20 20 20 20 63 2E
+       20 31 30 20 24
+						
+ 0181 39 2E 20 31 35 2B			Quest9 db "9. 15+9 = ?  $"
+       39 20 3D 20 3F 20
+       20 24
+ 018F 61 2E 20 32 35 20			Mcq_Quest9 db "a. 25            b. 96      c. 10 $";,;0dh,0ah
+       20 20 20 20 20 20
+       20 20 20 20 20 62
+       2E 20 39 36 20 20
+       20 20 20 20 63 2E
+       20 31 30 20 24
+
+ 01B2 31 30 2E 20 39 2B			Quest10 db "10. 9+6 = ?  $"
+       36 20 3D 20 3F 20
+       20 24
+ 01C0 61 2E 20 31 34 20			Mcq_Quest10 db "a. 14            b. 96      c. 10 $";,;0dh,0ah
+       20 20 20 20 20 20
+       20 20 20 20 20 62
+       2E 20 39 36 20 20
+       20 20 20 20 63 2E
+       20 31 30 20 24
+
+ 01E3 20 59 6F 75 72 20			right_answer db " Your answer is right: $";0dh,0ah
+       61 6E 73 77 65 72
+       20 69 73 20 72 69
+       67 68 74 3A 20 24
+ 01FB 20 59 6F 75 72 20			wrong_answer db " Your answer is wrong:$" ;0dh,0ah
+       61 6E 73 77 65 72
+       20 69 73 20 77 72
+       6F 6E 67 3A 24
+					;ending db "        Your Quiz is over know           $" 
+					
+					
+					;intro db "      Quiz Game over Math simple Questions      $ "
+					
+ 0212 0A				count_Number byte 10
+						
+ 0213 31 2E 20 4E 75 6D			Quest11 db "1. Number of machine cycles required for RET instruction in 8085 microprocessor is  $"
+       62 65 72 20 6F 66
+       20 6D 61 63 68 69
+       6E 65 20 63 79 63
+       6C 65 73 20 72 65
+       71 75 69 72 65 64
+       20 66 6F 72 20 52
+       45 54 20 69 6E 73
+       74 72 75 63 74 69
+       6F 6E 20 69 6E 20
+       38 30 38 35 20 6D
+       69 63 72 6F 70 72
+       6F 63 65 73 73 6F
+       72 20 69 73 20 20
+       24
+ 0268 61 2E 20 31 20 20			Mcq_Quest11 db "a. 1           b. 2    c. 3     d. 5  $ ";
+       20 20 20 20 20 20
+       20 20 20 62 2E 20
+       32 20 20 20 20 63
+       2E 20 33 20 20 20
+       20 20 64 2E 20 35
+       20 20 24 20
+					
+					
+ 0290 32 2E 20 57 68 69			Quest12 db "2. Which of the following interrupt has highest Priority $"
+       63 68 20 6F 66 20
+       74 68 65 20 66 6F
+       6C 6C 6F 77 69 6E
+       67 20 69 6E 74 65
+       72 72 75 70 74 20
+       68 61 73 20 68 69
+       67 68 65 73 74 20
+       50 72 69 6F 72 69
+       74 79 20 24
+ 02CA 61 2E 20 49 4E 54			Mcq_Quest12 db "a. INTR            b. TRAP      c. RST7.5   d. RST $"; ANSWER B
+       52 20 20 20 20 20
+       20 20 20 20 20 20
+       20 62 2E 20 54 52
+       41 50 20 20 20 20
+       20 20 63 2E 20 52
+       53 54 37 2E 35 20
+       20 20 64 2E 20 52
+       53 54 20 24
+
+ 02FE 33 2E 20 49 6E 73			Quest13 db "3. Instructions performing actions in assembly language are called ?  $"
+       74 72 75 63 74 69
+       6F 6E 73 20 70 65
+       72 66 6F 72 6D 69
+       6E 67 20 61 63 74
+       69 6F 6E 73 20 69
+       6E 20 61 73 73 65
+       6D 62 6C 79 20 6C
+       61 6E 67 75 61 67
+       65 20 61 72 65 20
+       63 61 6C 6C 65 64
+       20 3F 20 20 24
+ 0345 61 2E 20 49 4D 50			Mcq_Quest13 db "a. IMPERATIVE STATEMENT           b. DECLAERATIVE       c. DIRECTIVE    d. None   $"; Answer A
+       45 52 41 54 49 56
+       45 20 53 54 41 54
+       45 4D 45 4E 54 20
+       20 20 20 20 20 20
+       20 20 20 20 62 2E
+       20 44 45 43 4C 41
+       45 52 41 54 49 56
+       45 20 20 20 20 20
+       20 20 63 2E 20 44
+       49 52 45 43 54 49
+       56 45 20 20 20 20
+       64 2E 20 4E 6F 6E
+       65 20 20 20 24
+
+ 0398 34 2E 20 48 6F 77			Quest14 db "4. How many memory locations are required to store the instruction LXIH, 0800H in an 8085 assembly language program  ? $"
+       20 6D 61 6E 79 20
+       6D 65 6D 6F 72 79
+       20 6C 6F 63 61 74
+       69 6F 6E 73 20 61
+       72 65 20 72 65 71
+       75 69 72 65 64 20
+       74 6F 20 73 74 6F
+       72 65 20 74 68 65
+       20 69 6E 73 74 72
+       75 63 74 69 6F 6E
+       20 4C 58 49 48 2C
+       20 30 38 30 30 48
+       20 69 6E 20 61 6E
+       20 38 30 38 35 20
+       61 73 73 65 6D 62
+       6C 79 20 6C 61 6E
+       67 75 61 67 65 20
+       70 72 6F 67 72 61
+       6D 20 20 3F 20 24
+ 0410 61 2E 20 31 20 20			Mcq_Quest14 db "a. 1            b. 2        c. 3    d.4    $";,;0dh,0ah ; correct 2(b)
+       20 20 20 20 20 20
+       20 20 20 20 62 2E
+       20 32 20 20 20 20
+       20 20 20 20 63 2E
+       20 33 20 20 20 20
+       64 2E 34 20 20 20
+       20 24
+
+ 043C 35 2E 20 49 6E 20			Quest15 db "5. In 8085 which is/are the 16 bit registers? ? $"
+       38 30 38 35 20 77
+       68 69 63 68 20 69
+       73 2F 61 72 65 20
+       74 68 65 20 31 36
+       20 62 69 74 20 72
+       65 67 69 73 74 65
+       72 73 3F 20 3F 20
+       24
+ 046D 61 2E 20 70 72 6F			Mcq_Quest15 db "a. program counter           b. stack pointer      c. A &B   d. None $"; ;option c
+       67 72 61 6D 20 63
+       6F 75 6E 74 65 72
+       20 20 20 20 20 20
+       20 20 20 20 20 62
+       2E 20 73 74 61 63
+       6B 20 70 6F 69 6E
+       74 65 72 20 20 20
+       20 20 20 63 2E 20
+       41 20 26 42 20 20
+       20 64 2E 20 4E 6F
+       6E 65 20 24
+
+ 04B3 36 2E 20 57 68 69			Quest16 db "6. Which of the following instruction(s) can be performed only in CX register  $"
+       63 68 20 6F 66 20
+       74 68 65 20 66 6F
+       6C 6C 6F 77 69 6E
+       67 20 69 6E 73 74
+       72 75 63 74 69 6F
+       6E 28 73 29 20 63
+       61 6E 20 62 65 20
+       70 65 72 66 6F 72
+       6D 65 64 20 6F 6E
+       6C 79 20 69 6E 20
+       43 58 20 72 65 67
+       69 73 74 65 72 20
+       20 24
+ 0503 61 2E 20 4C 6F 6F			Mcq_Quest16 db "a. Loop           b. MUL,DIV,CBW      c. ADD ,SUB $";,option a
+       70 20 20 20 20 20
+       20 20 20 20 20 20
+       62 2E 20 4D 55 4C
+       2C 44 49 56 2C 43
+       42 57 20 20 20 20
+       20 20 63 2E 20 41
+       44 44 20 2C 53 55
+       42 20 24
+
+ 0536 37 2E 20 54 68 65			Quest17 db "7. The CX register full name is ? $"
+       20 43 58 20 72 65
+       67 69 73 74 65 72
+       20 66 75 6C 6C 20
+       6E 61 6D 65 20 69
+       73 20 3F 20 24
+ 0559 61 2E 20 41 63 63			Mcq_Quest17 db "a. Accumulator Register      b. Base Register      c. Counter Register  d.None  $";,;0dh,0ah
+       75 6D 75 6C 61 74
+       6F 72 20 52 65 67
+       69 73 74 65 72 20
+       20 20 20 20 20 62
+       2E 20 42 61 73 65
+       20 52 65 67 69 73
+       74 65 72 20 20 20
+       20 20 20 63 2E 20
+       43 6F 75 6E 74 65
+       72 20 52 65 67 69
+       73 74 65 72 20 20
+       64 2E 4E 6F 6E 65
+       20 20 24
+
+ 05AA 38 2E 20 68 6F 77			Quest18 db "8. how many bits in one double word ?  $"
+       20 6D 61 6E 79 20
+       62 69 74 73 20 69
+       6E 20 6F 6E 65 20
+       64 6F 75 62 6C 65
+       20 77 6F 72 64 20
+       3F 20 20 24
+ 05D2 61 2E 20 38 20 62			Mcq_Quest18 db "a. 8 bits            b. 16 bits      c. 32 bits $";,;0dh,0ah
+       69 74 73 20 20 20
+       20 20 20 20 20 20
+       20 20 20 62 2E 20
+       31 36 20 62 69 74
+       73 20 20 20 20 20
+       20 63 2E 20 33 32
+       20 62 69 74 73 20
+       24
+						
+ 0603 39 2E 20 48 6F 77			Quest19 db "9. How many bytes in a double word $"
+       20 6D 61 6E 79 20
+       62 79 74 65 73 20
+       69 6E 20 61 20 64
+       6F 75 62 6C 65 20
+       77 6F 72 64 20 24
+ 0627 61 2E 20 31 20 62			Mcq_Quest19 db "a. 1 byte            b. 2 byte      c. 4 byte $";,;0dh,0ah
+       79 74 65 20 20 20
+       20 20 20 20 20 20
+       20 20 20 62 2E 20
+       32 20 62 79 74 65
+       20 20 20 20 20 20
+       63 2E 20 34 20 62
+       79 74 65 20 24
+
+ 0656 31 30 2E 20 57 68			Quest20 db "10. What is the length of the 8088’s physical address   $"
+       61 74 20 69 73 20
+       74 68 65 20 6C 65
+       6E 67 74 68 20 6F
+       66 20 74 68 65 20
+       38 30 38 38 92 73
+       20 70 68 79 73 69
+       63 61 6C 20 61 64
+       64 72 65 73 73 20
+       20 20 24
+ 068F 61 2E 20 38 20 62			Mcq_Quest20 db "a. 8 bits            b. 16 bits      c. 20 bits $"; correct opt is b
+       69 74 73 20 20 20
+       20 20 20 20 20 20
+       20 20 20 62 2E 20
+       31 36 20 62 69 74
+       73 20 20 20 20 20
+       20 63 2E 20 32 30
+       20 62 69 74 73 20
+       24
+
+ 06C0 20 59 6F 75 72 20			right_answer_2 db " Your answer is right: $"
+       61 6E 73 77 65 72
+       20 69 73 20 72 69
+       67 68 74 3A 20 24
+ 06D8 20 59 6F 75 72 20			wrong_answer_2 db " Your answer is wrong:$"
+       61 6E 73 77 65 72
+       20 69 73 20 77 72
+       6F 6E 67 3A 24
+ 06EF 20 20 20 20 20 20			ending_2 db "        Your Quiz is over know           $" 
+       20 20 59 6F 75 72
+       20 51 75 69 7A 20
+       69 73 20 6F 76 65
+       72 20 6B 6E 6F 77
+       20 20 20 20 20 20
+       20 20 20 20 20 24
+					
+					
+ 0719 20 20 20 20 20 20			intro_2 db "            Congratulation , You Completed The Quiz: $"
+       20 20 20 20 20 20
+       43 6F 6E 67 72 61
+       74 75 6C 61 74 69
+       6F 6E 20 2C 20 59
+       6F 75 20 43 6F 6D
+       70 6C 65 74 65 64
+       20 54 68 65 20 51
+       75 69 7A 3A 20 24
+					
+ 074F 0A				count_Number_2 db 10
+					
+					
+ 0750 20 20 20 20 20 20			total_marks db "            YOUR Total Marks is =   10      $"
+       20 20 20 20 20 20
+       59 4F 55 52 20 54
+       6F 74 61 6C 20 4D
+       61 72 6B 73 20 69
+       73 20 3D 20 20 20
+       31 30 20 20 20 20
+       20 20 24
+ 077D 20 20 20 20 20 20			obtain_marks db "           Your obtained Marks is = $"
+       20 20 20 20 20 59
+       6F 75 72 20 6F 62
+       74 61 69 6E 65 64
+       20 4D 61 72 6B 73
+       20 69 73 20 3D 20
+       24
+
+ 07A2 21 21 21 21 21 21			select0 byte "!!!!!! Please Choose Your Course!!!!! : $" 
+       20 50 6C 65 61 73
+       65 20 43 68 6F 6F
+       73 65 20 59 6F 75
+       72 20 43 6F 75 72
+       73 65 21 21 21 21
+       21 20 3A 20 24
+ 07CB 20 50 6C 65 61 73			select byte " Please press 'M'  for Simple Mathematics : $"
+       65 20 70 72 65 73
+       73 20 27 4D 27 20
+       20 66 6F 72 20 53
+       69 6D 70 6C 65 20
+       4D 61 74 68 65 6D
+       61 74 69 63 73 20
+       3A 20 24
+ 07F8 20 50 6C 65 61 73			select1 byte " Please press 'A' for  Assembly Language : $"
+       65 20 70 72 65 73
+       73 20 27 41 27 20
+       66 6F 72 20 20 41
+       73 73 65 6D 62 6C
+       79 20 4C 61 6E 67
+       75 61 67 65 20 3A
+       20 24
+ 0000				.code
+ 0000					main proc
+					
+ 0000  B8 ---- R			MOV AX,@DATA
+ 0003  8E D8				MOV DS,AX
+ 0005  66| 33 C0			xor eax,eax
+ 0008  66| 33 D2			xor edx,edx
+ 000B  66| 33 C9			xor ecx,ecx
+ 000E  66| 33 DB			xor ebx,ebx
+ 0011  66| 33 F6			xor esi,esi
+					;------------------------------------------------------------------------------------------------
+					
+					call_Mouse
+ 0014  50		     1		push ax
+ 0015  B8 0001		     1			mov ax,0001h   ;ax=000 mouse initilization
+ 0018  CD 33		     1			int 33h			;ax=001 show mouse position
+ 001A			     1			Level:
+ 001A  B8 0005		     1				mov ax,0005h
+ 001D  BB 0000		     1				mov bx,0
+ 0020  CD 33		     1				int 33h
+ 0022  83 F8 01		     1			cmp ax,1
+ 0025  75 F3		     1			jne level
+ 0027  58		     1			pop ax
+					
+ 0028  B4 00				mov ah,00h	;for the full screen
+ 002A  B0 02				mov al,02h ; video mode
+ 002C  CD 10				int 10h
+					
+					
+					
+					;for coloring 
+ 002E  66| 60				pushad
+ 0030  B4 09				mov ah,9
+ 0032  B9 0028				mov cx,lengthof select0-1
+ 0035  B3 0A				mov bl,0Ah
+ 0037  CD 10				int 10h
+ 0039  66| 61				popad
+					
+					print Select0  ;for msg
+ 003B  BA 07A2 R	     1		MOV DX,OFFSET Select0
+ 003E  B4 09		     1		MOV AH,9
+ 0040  CD 21		     1		int 21h
+					
+					newline
+ 0042  B4 02		     1		mov ah,2
+ 0044  B2 0A		     1		mov dl,0ah
+ 0046  CD 21		     1		int 21h
+ 0048  B2 0D		     1		mov dl,0dh
+ 004A  CD 21		     1		int 21h
+ 004C  B2 0D		     1		mov dl,0dh
+ 004E  CD 21		     1		int 21h
+					
+ 0050  66| 60				pushad
+ 0052  B4 09				mov ah,9
+ 0054  B9 002C				mov cx,lengthof select-1
+ 0057  B3 0A				mov bl,0Ah
+ 0059  CD 10				int 10h
+ 005B  66| 61				popad
+					
+					print select  ;for msg
+ 005D  BA 07CB R	     1		MOV DX,OFFSET select
+ 0060  B4 09		     1		MOV AH,9
+ 0062  CD 21		     1		int 21h
+					
+					newline
+ 0064  B4 02		     1		mov ah,2
+ 0066  B2 0A		     1		mov dl,0ah
+ 0068  CD 21		     1		int 21h
+ 006A  B2 0D		     1		mov dl,0dh
+ 006C  CD 21		     1		int 21h
+ 006E  B2 0D		     1		mov dl,0dh
+ 0070  CD 21		     1		int 21h
+					
+ 0072  66| 60				pushad
+ 0074  B4 09				mov ah,9
+ 0076  B9 002B				mov cx,lengthof select1-1
+ 0079  B3 0A				mov bl,0Ah
+ 007B  CD 10				int 10h
+ 007D  66| 61				popad
+					
+					print select1	;msg
+ 007F  BA 07F8 R	     1		MOV DX,OFFSET select1
+ 0082  B4 09		     1		MOV AH,9
+ 0084  CD 21		     1		int 21h
+						
+					newline
+ 0086  B4 02		     1		mov ah,2
+ 0088  B2 0A		     1		mov dl,0ah
+ 008A  CD 21		     1		int 21h
+ 008C  B2 0D		     1		mov dl,0dh
+ 008E  CD 21		     1		int 21h
+ 0090  B2 0D		     1		mov dl,0dh
+ 0092  CD 21		     1		int 21h
+					input 				;user input 
+ 0094  B4 01		     1		mov ah,1
+ 0096  CD 21		     1		int 21h
+					
+ 0098  3C 6D				cmp al,'m'
+ 009A  74 08					je L1
+ 009C  75 00					jne L3
+					
+ 009E					L3:
+ 009E  3C 61					cmp al,'a'
+ 00A0  74 15					je L4
+ 00A2  75 26					jne next
+ 00A4					L1:
+					;	pushad
+					;	mov ah,9
+					;	mov cx,lengthof intro-1
+					;	mov bl,0Ah
+					;	int 10h
+					;	popad
+					
+					;	print intro
+ 00A4  E8 0027					call simple_Math_Quizz
+						newline
+ 00A7  B4 02		     1		mov ah,2
+ 00A9  B2 0A		     1		mov dl,0ah
+ 00AB  CD 21		     1		int 21h
+ 00AD  B2 0D		     1		mov dl,0dh
+ 00AF  CD 21		     1		int 21h
+ 00B1  B2 0D		     1		mov dl,0dh
+ 00B3  CD 21		     1		int 21h
+ 00B5  EB 13					jmp next
+					
+ 00B7					L4:
+ 00B7  E8 0681					call Assembly_Quizz
+						newline
+ 00BA  B4 02		     1		mov ah,2
+ 00BC  B2 0A		     1		mov dl,0ah
+ 00BE  CD 21		     1		int 21h
+ 00C0  B2 0D		     1		mov dl,0dh
+ 00C2  CD 21		     1		int 21h
+ 00C4  B2 0D		     1		mov dl,0dh
+ 00C6  CD 21		     1		int 21h
+ 00C8  EB 00					jmp next
+					
+					;----------print the string ---------------------------
+
+ 00CA					next:
+						programe_exit
+ 00CA  B4 4C		     1		mov ah,4ch
+ 00CC  CD 21		     1		int 21h
+
+ 00CE				main endp
+ 00CE					simple_Math_Quizz proc
+						
+ 00CE  66| 33 C9				xor ecx,ecx
+ 00D1  8A 0E 0212 R				mov cl,count_number
+					
+
+					newline
+ 00D5  B4 02		     1		mov ah,2
+ 00D7  B2 0A		     1		mov dl,0ah
+ 00D9  CD 21		     1		int 21h
+ 00DB  B2 0D		     1		mov dl,0dh
+ 00DD  CD 21		     1		int 21h
+ 00DF  B2 0D		     1		mov dl,0dh
+ 00E1  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					
+					
+					
+					
+ 00E3  66| 60				pushad
+ 00E5  B4 09				mov ah,9
+ 00E7  B9 000C				mov cx,lengthof Quest1-1
+ 00EA  B3 0A				mov bl,0Ah
+ 00EC  CD 10				int 10h
+ 00EE  66| 61				popad
+					
+					print Quest1
+ 00F0  BA 0000 R	     1		MOV DX,OFFSET Quest1
+ 00F3  B4 09		     1		MOV AH,9
+ 00F5  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 00F7  B4 02		     1		mov ah,2
+ 00F9  B2 0A		     1		mov dl,0ah
+ 00FB  CD 21		     1		int 21h
+ 00FD  B2 0D		     1		mov dl,0dh
+ 00FF  CD 21		     1		int 21h
+ 0101  B2 0D		     1		mov dl,0dh
+ 0103  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 0105  66| 60				pushad
+ 0107  B4 09				mov ah,9
+ 0109  B9 0020				mov cx,lengthof Mcq_Quest1-1
+ 010C  B3 0A				mov bl,0Ah
+ 010E  CD 10				int 10h
+ 0110  66| 61				popad
+					
+					print Mcq_Quest1
+ 0112  BA 000D R	     1		MOV DX,OFFSET Mcq_Quest1
+ 0115  B4 09		     1		MOV AH,9
+ 0117  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0119  B4 02		     1		mov ah,2
+ 011B  B2 0A		     1		mov dl,0ah
+ 011D  CD 21		     1		int 21h
+ 011F  B2 0D		     1		mov dl,0dh
+ 0121  CD 21		     1		int 21h
+ 0123  B2 0D		     1		mov dl,0dh
+ 0125  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					
+					
+					;------------user input ------------------
+					input
+ 0127  B4 01		     1		mov ah,1
+ 0129  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					
+					
+ 012B  3C 63				cmp al,'c'
+ 012D  74 02				je	ri_a			;jump if equal
+ 012F  EB 24				jmp wrong
+					
+ 0131					ri_a:
+ 0131  66| 60					pushad
+ 0133  B4 09					mov ah,9
+ 0135  B9 0017					mov cx,lengthof right_answer-1
+ 0138  B3 0A					mov bl,0Ah
+ 013A  CD 10					int 10h
+ 013C  66| 61					popad
+						
+						print right_answer
+ 013E  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 0141  B4 09		     1		MOV AH,9
+ 0143  CD 21		     1		int 21h
+						newline
+ 0145  B4 02		     1		mov ah,2
+ 0147  B2 0A		     1		mov dl,0ah
+ 0149  CD 21		     1		int 21h
+ 014B  B2 0D		     1		mov dl,0dh
+ 014D  CD 21		     1		int 21h
+ 014F  B2 0D		     1		mov dl,0dh
+ 0151  CD 21		     1		int 21h
+						
+ 0153  EB 25					jmp Question1
+					
+ 0155					wrong:
+						
+ 0155  80 E9 01					sub cl,1
+ 0158  66| 60					pushad
+ 015A  B4 09					mov ah,9
+ 015C  B9 0016					mov cx,lengthof wrong_answer-1
+ 015F  B3 0A					mov bl,0Ah
+ 0161  CD 10					int 10h
+ 0163  66| 61					popad
+						print wrong_answer
+ 0165  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0168  B4 09		     1		MOV AH,9
+ 016A  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 016C  B4 02		     1		mov ah,2
+ 016E  B2 0A		     1		mov dl,0ah
+ 0170  CD 21		     1		int 21h
+ 0172  B2 0D		     1		mov dl,0dh
+ 0174  CD 21		     1		int 21h
+ 0176  B2 0D		     1		mov dl,0dh
+ 0178  CD 21		     1		int 21h
+					;----------------------------------------------------------
+						
+ 017A					Question1:
+ 017A  66| 60					pushad
+ 017C  B4 09					mov ah,9
+ 017E  B9 000B					mov cx,lengthof Quest2-1
+ 0181  B3 0A					mov bl,0Ah
+ 0183  CD 10					int 10h
+ 0185  66| 61					popad	
+						print Quest2
+ 0187  BA 002E R	     1		MOV DX,OFFSET Quest2
+ 018A  B4 09		     1		MOV AH,9
+ 018C  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 018E  B4 02		     1		mov ah,2
+ 0190  B2 0A		     1		mov dl,0ah
+ 0192  CD 21		     1		int 21h
+ 0194  B2 0D		     1		mov dl,0dh
+ 0196  CD 21		     1		int 21h
+ 0198  B2 0D		     1		mov dl,0dh
+ 019A  CD 21		     1		int 21h
+					;----------------------------------------------------------
+
+ 019C  66| 60					pushad
+ 019E  B4 09					mov ah,9
+ 01A0  B9 0022					mov cx,lengthof Mcq_Quest2-1
+ 01A3  B3 0A					mov bl,0Ah
+ 01A5  CD 10					int 10h
+ 01A7  66| 61					popad
+					
+						print Mcq_Quest2
+ 01A9  BA 003A R	     1		MOV DX,OFFSET Mcq_Quest2
+ 01AC  B4 09		     1		MOV AH,9
+ 01AE  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 01B0  B4 02		     1		mov ah,2
+ 01B2  B2 0A		     1		mov dl,0ah
+ 01B4  CD 21		     1		int 21h
+ 01B6  B2 0D		     1		mov dl,0dh
+ 01B8  CD 21		     1		int 21h
+ 01BA  B2 0D		     1		mov dl,0dh
+ 01BC  CD 21		     1		int 21h
+					;---------------user input-------------------------------------------
+					
+					input
+ 01BE  B4 01		     1		mov ah,1
+ 01C0  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					;newline
+					;----------------------------------------------------------
+
+						
+ 01C2  3C 62				cmp al,'b'
+ 01C4  74 02					je ri_a2
+ 01C6  EB 24					jmp wrong2
+						
+ 01C8					ri_a2:
+ 01C8  66| 60				pushad
+ 01CA  B4 09				mov ah,9
+ 01CC  B9 0017				mov cx,lengthof right_answer-1
+ 01CF  B3 0A				mov bl,0Ah
+ 01D1  CD 10				int 10h
+ 01D3  66| 61				popad
+					
+					
+					print right_answer
+ 01D5  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 01D8  B4 09		     1		MOV AH,9
+ 01DA  CD 21		     1		int 21h
+					
+					;-----------new line + next line----------------------------
+
+					newline
+ 01DC  B4 02		     1		mov ah,2
+ 01DE  B2 0A		     1		mov dl,0ah
+ 01E0  CD 21		     1		int 21h
+ 01E2  B2 0D		     1		mov dl,0dh
+ 01E4  CD 21		     1		int 21h
+ 01E6  B2 0D		     1		mov dl,0dh
+ 01E8  CD 21		     1		int 21h
+					;----------------------------------------------------------
+
+ 01EA  EB 25					jmp Question3
+					
+					
+					
+ 01EC					wrong2:
+
+ 01EC  80 E9 01					sub cl,1
+						
+ 01EF  66| 60					pushad
+ 01F1  B4 09					mov ah,9
+ 01F3  B9 0016					mov cx,lengthof wrong_answer-1
+ 01F6  B3 0A					mov bl,0Ah
+ 01F8  CD 10					int 10h
+ 01FA  66| 61					popad
+					print wrong_answer
+ 01FC  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 01FF  B4 09		     1		MOV AH,9
+ 0201  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0203  B4 02		     1		mov ah,2
+ 0205  B2 0A		     1		mov dl,0ah
+ 0207  CD 21		     1		int 21h
+ 0209  B2 0D		     1		mov dl,0dh
+ 020B  CD 21		     1		int 21h
+ 020D  B2 0D		     1		mov dl,0dh
+ 020F  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 0211					Question3:
+ 0211  66| 60				pushad
+ 0213  B4 09				mov ah,9
+ 0215  B9 000C				mov cx,lengthof Quest3-1
+ 0218  B3 0A				mov bl,0Ah
+ 021A  CD 10				int 10h
+ 021C  66| 61				popad	
+
+					print Quest3
+ 021E  BA 005D R	     1		MOV DX,OFFSET Quest3
+ 0221  B4 09		     1		MOV AH,9
+ 0223  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0225  B4 02		     1		mov ah,2
+ 0227  B2 0A		     1		mov dl,0ah
+ 0229  CD 21		     1		int 21h
+ 022B  B2 0D		     1		mov dl,0dh
+ 022D  CD 21		     1		int 21h
+ 022F  B2 0D		     1		mov dl,0dh
+ 0231  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 0233  66| 60				pushad
+ 0235  B4 09				mov ah,9
+ 0237  B9 0022				mov cx,lengthof Mcq_Quest3-1
+ 023A  B3 0A				mov bl,0Ah
+ 023C  CD 10				int 10h
+ 023E  66| 61				popad
+					print Mcq_Quest3
+ 0240  BA 006A R	     1		MOV DX,OFFSET Mcq_Quest3
+ 0243  B4 09		     1		MOV AH,9
+ 0245  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0247  B4 02		     1		mov ah,2
+ 0249  B2 0A		     1		mov dl,0ah
+ 024B  CD 21		     1		int 21h
+ 024D  B2 0D		     1		mov dl,0dh
+ 024F  CD 21		     1		int 21h
+ 0251  B2 0D		     1		mov dl,0dh
+ 0253  CD 21		     1		int 21h
+					;----------------------------------------------------------
+						
+					input
+ 0255  B4 01		     1		mov ah,1
+ 0257  CD 21		     1		int 21h
+ 0259  3C 61				cmp al,'a'
+ 025B  74 02					je ri_a3
+ 025D  EB 24					jmp wrong3
+						
+ 025F					ri_a3:
+ 025F  66| 60				pushad
+ 0261  B4 09				mov ah,9
+ 0263  B9 0017				mov cx,lengthof right_answer-1
+ 0266  B3 0A				mov bl,0Ah
+ 0268  CD 10				int 10h
+ 026A  66| 61				popad
+						print right_answer
+ 026C  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 026F  B4 09		     1		MOV AH,9
+ 0271  CD 21		     1		int 21h
+						
+					;-----------new line + next line----------------------------
+					
+					newline
+ 0273  B4 02		     1		mov ah,2
+ 0275  B2 0A		     1		mov dl,0ah
+ 0277  CD 21		     1		int 21h
+ 0279  B2 0D		     1		mov dl,0dh
+ 027B  CD 21		     1		int 21h
+ 027D  B2 0D		     1		mov dl,0dh
+ 027F  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+
+ 0281  EB 25					jmp Question4
+					
+					
+					
+ 0283					wrong3:
+					
+ 0283  80 E9 01					sub cl,1
+ 0286  66| 60				pushad
+ 0288  B4 09				mov ah,9
+ 028A  B9 0016				mov cx,lengthof wrong_answer-1
+ 028D  B3 0A				mov bl,0Ah
+ 028F  CD 10				int 10h
+ 0291  66| 61				popad
+					
+					print wrong_answer
+ 0293  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0296  B4 09		     1		MOV AH,9
+ 0298  CD 21		     1		int 21h
+					
+					;-----------new line + next line----------------------------
+					newline
+ 029A  B4 02		     1		mov ah,2
+ 029C  B2 0A		     1		mov dl,0ah
+ 029E  CD 21		     1		int 21h
+ 02A0  B2 0D		     1		mov dl,0dh
+ 02A2  CD 21		     1		int 21h
+ 02A4  B2 0D		     1		mov dl,0dh
+ 02A6  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 02A8					Question4:
+					
+ 02A8  66| 60				pushad
+ 02AA  B4 09				mov ah,9
+ 02AC  B9 000D				mov cx,lengthof Quest4-1
+ 02AF  B3 0A				mov bl,0Ah
+ 02B1  CD 10				int 10h
+ 02B3  66| 61				popad
+					print Quest4
+ 02B5  BA 008D R	     1		MOV DX,OFFSET Quest4
+ 02B8  B4 09		     1		MOV AH,9
+ 02BA  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 02BC  B4 02		     1		mov ah,2
+ 02BE  B2 0A		     1		mov dl,0ah
+ 02C0  CD 21		     1		int 21h
+ 02C2  B2 0D		     1		mov dl,0dh
+ 02C4  CD 21		     1		int 21h
+ 02C6  B2 0D		     1		mov dl,0dh
+ 02C8  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 02CA  66| 60				pushad
+ 02CC  B4 09				mov ah,9
+ 02CE  B9 0022				mov cx,lengthof Mcq_Quest4-1
+ 02D1  B3 0A				mov bl,0Ah
+ 02D3  CD 10				int 10h
+ 02D5  66| 61				popad
+					print Mcq_Quest4
+ 02D7  BA 009B R	     1		MOV DX,OFFSET Mcq_Quest4
+ 02DA  B4 09		     1		MOV AH,9
+ 02DC  CD 21		     1		int 21h
+					;;-----------new line + next line----------------------------
+
+					newline
+ 02DE  B4 02		     1		mov ah,2
+ 02E0  B2 0A		     1		mov dl,0ah
+ 02E2  CD 21		     1		int 21h
+ 02E4  B2 0D		     1		mov dl,0dh
+ 02E6  CD 21		     1		int 21h
+ 02E8  B2 0D		     1		mov dl,0dh
+ 02EA  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					
+						input
+ 02EC  B4 01		     1		mov ah,1
+ 02EE  CD 21		     1		int 21h
+					
+ 02F0  3C 61				cmp al,'a'
+ 02F2  74 02					je ri_a4
+ 02F4  EB 24					jmp wrong4
+						
+ 02F6					ri_a4:
+ 02F6  66| 60				pushad
+ 02F8  B4 09				mov ah,9
+ 02FA  B9 0017				mov cx,lengthof right_answer-1
+ 02FD  B3 0A				mov bl,0Ah
+ 02FF  CD 10				int 10h
+ 0301  66| 61				popad
+					print right_answer
+ 0303  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 0306  B4 09		     1		MOV AH,9
+ 0308  CD 21		     1		int 21h
+					
+					;-----------new line + next line----------------------------
+
+					newline
+ 030A  B4 02		     1		mov ah,2
+ 030C  B2 0A		     1		mov dl,0ah
+ 030E  CD 21		     1		int 21h
+ 0310  B2 0D		     1		mov dl,0dh
+ 0312  CD 21		     1		int 21h
+ 0314  B2 0D		     1		mov dl,0dh
+ 0316  CD 21		     1		int 21h
+					;----------------------------------------------------------
+
+ 0318  EB 25					jmp Question5
+					
+					
+					
+ 031A					wrong4:
+					
+ 031A  80 E9 01					sub cl,1
+ 031D  66| 60				pushad
+ 031F  B4 09				mov ah,9
+ 0321  B9 0016				mov cx,lengthof wrong_answer-1
+ 0324  B3 0A				mov bl,0Ah
+ 0326  CD 10				int 10h
+ 0328  66| 61				popad
+					
+
+					print wrong_answer
+ 032A  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 032D  B4 09		     1		MOV AH,9
+ 032F  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0331  B4 02		     1		mov ah,2
+ 0333  B2 0A		     1		mov dl,0ah
+ 0335  CD 21		     1		int 21h
+ 0337  B2 0D		     1		mov dl,0dh
+ 0339  CD 21		     1		int 21h
+ 033B  B2 0D		     1		mov dl,0dh
+ 033D  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 033F					Question5:
+					
+					
+ 033F  66| 60				pushad
+ 0341  B4 09				mov ah,9
+ 0343  B9 000E				mov cx,lengthof Quest5-1
+ 0346  B3 0A				mov bl,0Ah
+ 0348  CD 10				int 10h
+ 034A  66| 61				popad
+					print Quest5
+ 034C  BA 00BE R	     1		MOV DX,OFFSET Quest5
+ 034F  B4 09		     1		MOV AH,9
+ 0351  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0353  B4 02		     1		mov ah,2
+ 0355  B2 0A		     1		mov dl,0ah
+ 0357  CD 21		     1		int 21h
+ 0359  B2 0D		     1		mov dl,0dh
+ 035B  CD 21		     1		int 21h
+ 035D  B2 0D		     1		mov dl,0dh
+ 035F  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					
+ 0361  66| 60				pushad
+ 0363  B4 09				mov ah,9
+ 0365  B9 0022				mov cx,lengthof Mcq_Quest4-1
+ 0368  B3 0A				mov bl,0Ah
+ 036A  CD 10				int 10h
+ 036C  66| 61				popad
+					print Mcq_Quest5
+ 036E  BA 00CD R	     1		MOV DX,OFFSET Mcq_Quest5
+ 0371  B4 09		     1		MOV AH,9
+ 0373  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0375  B4 02		     1		mov ah,2
+ 0377  B2 0A		     1		mov dl,0ah
+ 0379  CD 21		     1		int 21h
+ 037B  B2 0D		     1		mov dl,0dh
+ 037D  CD 21		     1		int 21h
+ 037F  B2 0D		     1		mov dl,0dh
+ 0381  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					
+					input	
+ 0383  B4 01		     1		mov ah,1
+ 0385  CD 21		     1		int 21h
+					
+					
+ 0387  3C 62				cmp al,'b'
+ 0389  74 02					je ri_a5
+ 038B  EB 24					jmp wrong5
+						
+ 038D					ri_a5:
+ 038D  66| 60				pushad
+ 038F  B4 09				mov ah,9
+ 0391  B9 0017				mov cx,lengthof right_answer-1
+ 0394  B3 0A				mov bl,0Ah
+ 0396  CD 10				int 10h
+ 0398  66| 61				popad
+						print right_answer
+ 039A  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 039D  B4 09		     1		MOV AH,9
+ 039F  CD 21		     1		int 21h
+						
+					;;-----------new line + next line----------------------------
+
+					newline
+ 03A1  B4 02		     1		mov ah,2
+ 03A3  B2 0A		     1		mov dl,0ah
+ 03A5  CD 21		     1		int 21h
+ 03A7  B2 0D		     1		mov dl,0dh
+ 03A9  CD 21		     1		int 21h
+ 03AB  B2 0D		     1		mov dl,0dh
+ 03AD  CD 21		     1		int 21h
+					;----------------------------------------------------------
+
+ 03AF  EB 25					jmp Question6
+					
+					
+					
+ 03B1					wrong5:
+					
+ 03B1  80 E9 01					sub cl,1
+ 03B4  66| 60				pushad
+ 03B6  B4 09				mov ah,9
+ 03B8  B9 0016				mov cx,lengthof wrong_answer-1
+ 03BB  B3 0A				mov bl,0Ah
+ 03BD  CD 10				int 10h
+ 03BF  66| 61				popad
+					
+					print wrong_answer
+ 03C1  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 03C4  B4 09		     1		MOV AH,9
+ 03C6  CD 21		     1		int 21h
+					;;-----------new line + next line----------------------------
+
+					newline
+ 03C8  B4 02		     1		mov ah,2
+ 03CA  B2 0A		     1		mov dl,0ah
+ 03CC  CD 21		     1		int 21h
+ 03CE  B2 0D		     1		mov dl,0dh
+ 03D0  CD 21		     1		int 21h
+ 03D2  B2 0D		     1		mov dl,0dh
+ 03D4  CD 21		     1		int 21h
+						
+ 03D6					Question6:
+ 03D6  66| 60				pushad
+ 03D8  B4 09				mov ah,9
+ 03DA  B9 000D				mov cx,lengthof Quest6-1
+ 03DD  B3 0A				mov bl,0Ah
+ 03DF  CD 10				int 10h
+ 03E1  66| 61				popad
+
+					print Quest6
+ 03E3  BA 00F0 R	     1		MOV DX,OFFSET Quest6
+ 03E6  B4 09		     1		MOV AH,9
+ 03E8  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 03EA  B4 02		     1		mov ah,2
+ 03EC  B2 0A		     1		mov dl,0ah
+ 03EE  CD 21		     1		int 21h
+ 03F0  B2 0D		     1		mov dl,0dh
+ 03F2  CD 21		     1		int 21h
+ 03F4  B2 0D		     1		mov dl,0dh
+ 03F6  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 03F8  66| 60				pushad
+ 03FA  B4 09				mov ah,9
+ 03FC  B9 0022				mov cx,lengthof Mcq_Quest6-1
+ 03FF  B3 0A				mov bl,0Ah
+ 0401  CD 10				int 10h
+ 0403  66| 61				popad
+					print Mcq_Quest6
+ 0405  BA 00FE R	     1		MOV DX,OFFSET Mcq_Quest6
+ 0408  B4 09		     1		MOV AH,9
+ 040A  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 040C  B4 02		     1		mov ah,2
+ 040E  B2 0A		     1		mov dl,0ah
+ 0410  CD 21		     1		int 21h
+ 0412  B2 0D		     1		mov dl,0dh
+ 0414  CD 21		     1		int 21h
+ 0416  B2 0D		     1		mov dl,0dh
+ 0418  CD 21		     1		int 21h
+					;------------------input----------------------------------------
+
+					input	
+ 041A  B4 01		     1		mov ah,1
+ 041C  CD 21		     1		int 21h
+ 041E  3C 61				cmp al,'a'
+ 0420  74 02					je ri_a6
+ 0422  EB 24					jmp wrong6
+						
+ 0424					ri_a6:
+ 0424  66| 60				pushad
+ 0426  B4 09				mov ah,9
+ 0428  B9 0017				mov cx,lengthof right_answer-1
+ 042B  B3 0A				mov bl,0Ah
+ 042D  CD 10				int 10h
+ 042F  66| 61				popad
+
+						print right_answer
+ 0431  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 0434  B4 09		     1		MOV AH,9
+ 0436  CD 21		     1		int 21h
+						
+					;-----------new line + next line----------------------------
+
+					newline
+ 0438  B4 02		     1		mov ah,2
+ 043A  B2 0A		     1		mov dl,0ah
+ 043C  CD 21		     1		int 21h
+ 043E  B2 0D		     1		mov dl,0dh
+ 0440  CD 21		     1		int 21h
+ 0442  B2 0D		     1		mov dl,0dh
+ 0444  CD 21		     1		int 21h
+					;----------------------------------------------------------
+
+ 0446  EB 25					jmp Question7
+
+ 0448					wrong6:
+
+ 0448  80 E9 01					sub cl,1
+
+ 044B  66| 60				pushad
+ 044D  B4 09				mov ah,9
+ 044F  B9 0016				mov cx,lengthof wrong_answer-1
+ 0452  B3 0A				mov bl,0Ah
+ 0454  CD 10				int 10h
+ 0456  66| 61				popad
+					
+						print wrong_answer
+ 0458  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 045B  B4 09		     1		MOV AH,9
+ 045D  CD 21		     1		int 21h
+					;;-----------new line + next line----------------------------
+
+					newline
+ 045F  B4 02		     1		mov ah,2
+ 0461  B2 0A		     1		mov dl,0ah
+ 0463  CD 21		     1		int 21h
+ 0465  B2 0D		     1		mov dl,0dh
+ 0467  CD 21		     1		int 21h
+ 0469  B2 0D		     1		mov dl,0dh
+ 046B  CD 21		     1		int 21h
+					
+ 046D					Question7:
+ 046D  66| 60				pushad
+ 046F  B4 09				mov ah,9
+ 0471  B9 000C				mov cx,lengthof Quest7-1
+ 0474  B3 0A				mov bl,0Ah
+ 0476  CD 10				int 10h
+ 0478  66| 61				popad
+						print Quest7
+ 047A  BA 0121 R	     1		MOV DX,OFFSET Quest7
+ 047D  B4 09		     1		MOV AH,9
+ 047F  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0481  B4 02		     1		mov ah,2
+ 0483  B2 0A		     1		mov dl,0ah
+ 0485  CD 21		     1		int 21h
+ 0487  B2 0D		     1		mov dl,0dh
+ 0489  CD 21		     1		int 21h
+ 048B  B2 0D		     1		mov dl,0dh
+ 048D  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 048F  66| 60				pushad
+ 0491  B4 09				mov ah,9
+ 0493  B9 0022				mov cx,lengthof Mcq_Quest7-1
+ 0496  B3 0A				mov bl,0Ah
+ 0498  CD 10				int 10h
+ 049A  66| 61				popad
+					print Mcq_Quest7
+ 049C  BA 012E R	     1		MOV DX,OFFSET Mcq_Quest7
+ 049F  B4 09		     1		MOV AH,9
+ 04A1  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 04A3  B4 02		     1		mov ah,2
+ 04A5  B2 0A		     1		mov dl,0ah
+ 04A7  CD 21		     1		int 21h
+ 04A9  B2 0D		     1		mov dl,0dh
+ 04AB  CD 21		     1		int 21h
+ 04AD  B2 0D		     1		mov dl,0dh
+ 04AF  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					input	
+ 04B1  B4 01		     1		mov ah,1
+ 04B3  CD 21		     1		int 21h
+ 04B5  3C 61				cmp al,'a'
+ 04B7  74 02					je ri_a7
+ 04B9  EB 24					jmp wrong7
+						
+ 04BB					ri_a7:
+ 04BB  66| 60				pushad
+ 04BD  B4 09				mov ah,9
+ 04BF  B9 0017				mov cx,lengthof right_answer-1
+ 04C2  B3 0A				mov bl,0Ah
+ 04C4  CD 10				int 10h
+ 04C6  66| 61				popad
+						print right_answer
+ 04C8  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 04CB  B4 09		     1		MOV AH,9
+ 04CD  CD 21		     1		int 21h
+						
+					;-----------new line + next line----------------------------
+
+					newline
+ 04CF  B4 02		     1		mov ah,2
+ 04D1  B2 0A		     1		mov dl,0ah
+ 04D3  CD 21		     1		int 21h
+ 04D5  B2 0D		     1		mov dl,0dh
+ 04D7  CD 21		     1		int 21h
+ 04D9  B2 0D		     1		mov dl,0dh
+ 04DB  CD 21		     1		int 21h
+					;----------------------------------------------------------
+
+ 04DD  EB 25					jmp Question8
+					
+					
+					
+ 04DF					wrong7:
+ 04DF  80 E9 01					sub cl,1
+ 04E2  66| 60				pushad
+ 04E4  B4 09				mov ah,9
+ 04E6  B9 0016				mov cx,lengthof wrong_answer-1
+ 04E9  B3 0A				mov bl,0Ah
+ 04EB  CD 10				int 10h
+ 04ED  66| 61				popad
+					
+
+						print wrong_answer
+ 04EF  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 04F2  B4 09		     1		MOV AH,9
+ 04F4  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 04F6  B4 02		     1		mov ah,2
+ 04F8  B2 0A		     1		mov dl,0ah
+ 04FA  CD 21		     1		int 21h
+ 04FC  B2 0D		     1		mov dl,0dh
+ 04FE  CD 21		     1		int 21h
+ 0500  B2 0D		     1		mov dl,0dh
+ 0502  CD 21		     1		int 21h
+ 0504					Question8:
+ 0504  66| 60					pushad
+ 0506  B4 09				mov ah,9
+ 0508  B9 000C				mov cx,lengthof Quest8-1
+ 050B  B3 0A				mov bl,0Ah
+ 050D  CD 10				int 10h
+ 050F  66| 61				popad
+
+					print Quest8
+ 0511  BA 0151 R	     1		MOV DX,OFFSET Quest8
+ 0514  B4 09		     1		MOV AH,9
+ 0516  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0518  B4 02		     1		mov ah,2
+ 051A  B2 0A		     1		mov dl,0ah
+ 051C  CD 21		     1		int 21h
+ 051E  B2 0D		     1		mov dl,0dh
+ 0520  CD 21		     1		int 21h
+ 0522  B2 0D		     1		mov dl,0dh
+ 0524  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 0526  66| 60				pushad
+ 0528  B4 09				mov ah,9
+ 052A  B9 0022				mov cx,lengthof Mcq_Quest8-1
+ 052D  B3 0A				mov bl,0Ah
+ 052F  CD 10				int 10h
+ 0531  66| 61				popad
+					print Mcq_Quest8
+ 0533  BA 015E R	     1		MOV DX,OFFSET Mcq_Quest8
+ 0536  B4 09		     1		MOV AH,9
+ 0538  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 053A  B4 02		     1		mov ah,2
+ 053C  B2 0A		     1		mov dl,0ah
+ 053E  CD 21		     1		int 21h
+ 0540  B2 0D		     1		mov dl,0dh
+ 0542  CD 21		     1		int 21h
+ 0544  B2 0D		     1		mov dl,0dh
+ 0546  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					
+					input	
+ 0548  B4 01		     1		mov ah,1
+ 054A  CD 21		     1		int 21h
+ 054C  3C 61				cmp al,'a'
+ 054E  74 02					je ri_a8
+ 0550  EB 24					jmp wrong8
+						
+ 0552					ri_a8:
+ 0552  66| 60				pushad
+ 0554  B4 09				mov ah,9
+ 0556  B9 0018				mov cx,lengthof right_answer
+ 0559  B3 0A				mov bl,0Ah
+ 055B  CD 10				int 10h
+ 055D  66| 61				popad
+							print right_answer
+ 055F  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 0562  B4 09		     1		MOV AH,9
+ 0564  CD 21		     1		int 21h
+							
+					;-----------new line + next line----------------------------
+
+					newline
+ 0566  B4 02		     1		mov ah,2
+ 0568  B2 0A		     1		mov dl,0ah
+ 056A  CD 21		     1		int 21h
+ 056C  B2 0D		     1		mov dl,0dh
+ 056E  CD 21		     1		int 21h
+ 0570  B2 0D		     1		mov dl,0dh
+ 0572  CD 21		     1		int 21h
+					;----------------------------------------------------------
+
+ 0574  EB 25					jmp Question9
+					
+					
+					
+ 0576					wrong8:
+					
+ 0576  80 E9 01					sub cl,1
+ 0579  66| 60				pushad
+ 057B  B4 09				mov ah,9
+ 057D  B9 0016				mov cx,lengthof wrong_answer-1
+ 0580  B3 0A				mov bl,0Ah
+ 0582  CD 10				int 10h
+ 0584  66| 61				popad
+					
+
+						print wrong_answer
+ 0586  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0589  B4 09		     1		MOV AH,9
+ 058B  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+
+					newline
+ 058D  B4 02		     1		mov ah,2
+ 058F  B2 0A		     1		mov dl,0ah
+ 0591  CD 21		     1		int 21h
+ 0593  B2 0D		     1		mov dl,0dh
+ 0595  CD 21		     1		int 21h
+ 0597  B2 0D		     1		mov dl,0dh
+ 0599  CD 21		     1		int 21h
+ 059B					Question9:
+ 059B  66| 60				pushad
+ 059D  B4 09				mov ah,9
+ 059F  B9 000D				mov cx,lengthof Quest9-1
+ 05A2  B3 0A				mov bl,0Ah
+ 05A4  CD 10				int 10h
+ 05A6  66| 61				popad
+					print Quest9
+ 05A8  BA 0181 R	     1		MOV DX,OFFSET Quest9
+ 05AB  B4 09		     1		MOV AH,9
+ 05AD  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 05AF  B4 02		     1		mov ah,2
+ 05B1  B2 0A		     1		mov dl,0ah
+ 05B3  CD 21		     1		int 21h
+ 05B5  B2 0D		     1		mov dl,0dh
+ 05B7  CD 21		     1		int 21h
+ 05B9  B2 0D		     1		mov dl,0dh
+ 05BB  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 05BD  66| 60				pushad
+ 05BF  B4 09				mov ah,9
+ 05C1  B9 0022				mov cx,lengthof Mcq_Quest9-1
+ 05C4  B3 0A				mov bl,0Ah
+ 05C6  CD 10				int 10h
+ 05C8  66| 61				popad
+					print Mcq_Quest9
+ 05CA  BA 018F R	     1		MOV DX,OFFSET Mcq_Quest9
+ 05CD  B4 09		     1		MOV AH,9
+ 05CF  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 05D1  B4 02		     1		mov ah,2
+ 05D3  B2 0A		     1		mov dl,0ah
+ 05D5  CD 21		     1		int 21h
+ 05D7  B2 0D		     1		mov dl,0dh
+ 05D9  CD 21		     1		int 21h
+ 05DB  B2 0D		     1		mov dl,0dh
+ 05DD  CD 21		     1		int 21h
+					;----------------input------------------------------------------
+					
+					input	
+ 05DF  B4 01		     1		mov ah,1
+ 05E1  CD 21		     1		int 21h
+ 05E3  3C 61				cmp al,'a'
+ 05E5  74 02					je ri_a9
+ 05E7  EB 24					jmp wrong9
+						
+ 05E9					ri_a9:
+					
+ 05E9  66| 60				pushad
+ 05EB  B4 09				mov ah,9
+ 05ED  B9 0017				mov cx,lengthof right_answer-1
+ 05F0  B3 0A				mov bl,0Ah
+ 05F2  CD 10				int 10h
+ 05F4  66| 61				popad
+						print right_answer
+ 05F6  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 05F9  B4 09		     1		MOV AH,9
+ 05FB  CD 21		     1		int 21h
+						
+					;-----------new line + next line----------------------------
+
+
+					newline
+ 05FD  B4 02		     1		mov ah,2
+ 05FF  B2 0A		     1		mov dl,0ah
+ 0601  CD 21		     1		int 21h
+ 0603  B2 0D		     1		mov dl,0dh
+ 0605  CD 21		     1		int 21h
+ 0607  B2 0D		     1		mov dl,0dh
+ 0609  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+
+ 060B  EB 25					jmp Question10
+					
+ 060D					wrong9:
+
+ 060D  80 E9 01					sub cl,1
+ 0610  66| 60				pushad
+ 0612  B4 09				mov ah,9
+ 0614  B9 0016				mov cx,lengthof wrong_answer-1
+ 0617  B3 0A				mov bl,0Ah
+ 0619  CD 10				int 10h
+ 061B  66| 61				popad
+					
+
+					print wrong_answer
+ 061D  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0620  B4 09		     1		MOV AH,9
+ 0622  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline	
+ 0624  B4 02		     1		mov ah,2
+ 0626  B2 0A		     1		mov dl,0ah
+ 0628  CD 21		     1		int 21h
+ 062A  B2 0D		     1		mov dl,0dh
+ 062C  CD 21		     1		int 21h
+ 062E  B2 0D		     1		mov dl,0dh
+ 0630  CD 21		     1		int 21h
+						
+ 0632					Question10:
+ 0632  66| 60				pushad
+ 0634  B4 09				mov ah,9
+ 0636  B9 000D				mov cx,lengthof Quest10-1
+ 0639  B3 0A				mov bl,0Ah
+ 063B  CD 10				int 10h
+ 063D  66| 61				popad
+					print Quest10
+ 063F  BA 01B2 R	     1		MOV DX,OFFSET Quest10
+ 0642  B4 09		     1		MOV AH,9
+ 0644  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0646  B4 02		     1		mov ah,2
+ 0648  B2 0A		     1		mov dl,0ah
+ 064A  CD 21		     1		int 21h
+ 064C  B2 0D		     1		mov dl,0dh
+ 064E  CD 21		     1		int 21h
+ 0650  B2 0D		     1		mov dl,0dh
+ 0652  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 0654  66| 60				pushad
+ 0656  B4 09				mov ah,9
+ 0658  B9 0022				mov cx,lengthof Mcq_Quest10-1
+ 065B  B3 0A				mov bl,0Ah
+ 065D  CD 10				int 10h
+ 065F  66| 61				popad
+					print Mcq_Quest10
+ 0661  BA 01C0 R	     1		MOV DX,OFFSET Mcq_Quest10
+ 0664  B4 09		     1		MOV AH,9
+ 0666  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					
+					newline
+ 0668  B4 02		     1		mov ah,2
+ 066A  B2 0A		     1		mov dl,0ah
+ 066C  CD 21		     1		int 21h
+ 066E  B2 0D		     1		mov dl,0dh
+ 0670  CD 21		     1		int 21h
+ 0672  B2 0D		     1		mov dl,0dh
+ 0674  CD 21		     1		int 21h
+					;------------input----------------------------------------------
+					
+					input	
+ 0676  B4 01		     1		mov ah,1
+ 0678  CD 21		     1		int 21h
+					
+ 067A  3C 61				cmp al,'a'
+ 067C  74 02					je ri_a10
+ 067E  EB 24					jmp wrong10
+						
+ 0680					ri_a10:
+ 0680  66| 60				pushad
+ 0682  B4 09				mov ah,9
+ 0684  B9 0017				mov cx,lengthof right_answer-1
+ 0687  B3 0A				mov bl,0Ah
+ 0689  CD 10				int 10h
+ 068B  66| 61				popad
+					print right_answer
+ 068D  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 0690  B4 09		     1		MOV AH,9
+ 0692  CD 21		     1		int 21h
+					
+					;-----------new line + next line----------------------------
+
+					newline
+ 0694  B4 02		     1		mov ah,2
+ 0696  B2 0A		     1		mov dl,0ah
+ 0698  CD 21		     1		int 21h
+ 069A  B2 0D		     1		mov dl,0dh
+ 069C  CD 21		     1		int 21h
+ 069E  B2 0D		     1		mov dl,0dh
+ 06A0  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+
+ 06A2  EB 25					jmp Question11
+					
+ 06A4					wrong10:
+ 06A4  80 E9 01				sub cl,1
+					
+ 06A7  66| 60				pushad
+ 06A9  B4 09				mov ah,9
+ 06AB  B9 0016				mov cx,lengthof wrong_answer-1
+ 06AE  B3 0A				mov bl,0Ah
+ 06B0  CD 10				int 10h
+ 06B2  66| 61				popad
+					
+
+					print wrong_answer
+ 06B4  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 06B7  B4 09		     1		MOV AH,9
+ 06B9  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					
+					newline
+ 06BB  B4 02		     1		mov ah,2
+ 06BD  B2 0A		     1		mov dl,0ah
+ 06BF  CD 21		     1		int 21h
+ 06C1  B2 0D		     1		mov dl,0dh
+ 06C3  CD 21		     1		int 21h
+ 06C5  B2 0D		     1		mov dl,0dh
+ 06C7  CD 21		     1		int 21h
+					;------------------------------------------------------------
+ 06C9					Question11:
+					
+					;-----------new line + next line----------------------------
+						newline
+ 06C9  B4 02		     1		mov ah,2
+ 06CB  B2 0A		     1		mov dl,0ah
+ 06CD  CD 21		     1		int 21h
+ 06CF  B2 0D		     1		mov dl,0dh
+ 06D1  CD 21		     1		int 21h
+ 06D3  B2 0D		     1		mov dl,0dh
+ 06D5  CD 21		     1		int 21h
+					;;-------count the numbers-----------------------------------------------------
+ 06D7  66| 60				pushad
+ 06D9  B4 09				mov ah,9
+ 06DB  B9 002C				mov cx,lengthof total_marks-1
+ 06DE  B3 0A				mov bl,0Ah
+ 06E0  CD 10				int 10h
+ 06E2  66| 61				popad
+					print total_marks
+ 06E4  BA 0750 R	     1		MOV DX,OFFSET total_marks
+ 06E7  B4 09		     1		MOV AH,9
+ 06E9  CD 21		     1		int 21h
+					newline
+ 06EB  B4 02		     1		mov ah,2
+ 06ED  B2 0A		     1		mov dl,0ah
+ 06EF  CD 21		     1		int 21h
+ 06F1  B2 0D		     1		mov dl,0dh
+ 06F3  CD 21		     1		int 21h
+ 06F5  B2 0D		     1		mov dl,0dh
+ 06F7  CD 21		     1		int 21h
+					
+ 06F9  66| 60				pushad
+ 06FB  B4 09				mov ah,9
+ 06FD  B9 0024				mov cx,lengthof obtain_marks-1
+ 0700  B3 0A				mov bl,0Ah
+ 0702  CD 10				int 10h
+ 0704  66| 61				popad
+					print obtain_marks
+ 0706  BA 077D R	     1		MOV DX,OFFSET obtain_marks
+ 0709  B4 09		     1		MOV AH,9
+ 070B  CD 21		     1		int 21h
+					
+ 070D  66| B8 00000000			mov eax,0
+ 0713  8A C1				mov al,cl
+ 0715  E8 0000 E			call writedec
+					
+					
+					newline
+ 0718  B4 02		     1		mov ah,2
+ 071A  B2 0A		     1		mov dl,0ah
+ 071C  CD 21		     1		int 21h
+ 071E  B2 0D		     1		mov dl,0dh
+ 0720  CD 21		     1		int 21h
+ 0722  B2 0D		     1		mov dl,0dh
+ 0724  CD 21		     1		int 21h
+					
+ 0726  66| 60				pushad
+ 0728  B4 09				mov ah,9
+ 072A  B9 0035				mov cx,lengthof intro_2-1
+ 072D  B3 0A				mov bl,0Ah
+ 072F  CD 10				int 10h
+ 0731  66| 61				popad
+					print intro_2
+ 0733  BA 0719 R	     1		MOV DX,OFFSET intro_2
+ 0736  B4 09		     1		MOV AH,9
+ 0738  CD 21		     1		int 21h
+ 073A  C3				ret
+					
+					
+					
+ 073B					simple_Math_Quizz endp
+					
+					;''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+					;2nd procedure
+ 073B					Assembly_Quizz proc
+						
+					
+					;-----------new line + next line----------------------------
+
+					
+					newline
+ 073B  B4 02		     1		mov ah,2
+ 073D  B2 0A		     1		mov dl,0ah
+ 073F  CD 21		     1		int 21h
+ 0741  B2 0D		     1		mov dl,0dh
+ 0743  CD 21		     1		int 21h
+ 0745  B2 0D		     1		mov dl,0dh
+ 0747  CD 21		     1		int 21h
+					;--------------------count numbers
+ 0749  8A 0E 074F R			mov cl ,count_Number_2
+
+					;----------------------------------------------------------
+					
+					
+					
+					;call GetNumberOfConsoleMouseButtons
+ 074D  66| 60				pushad
+ 074F  B4 09				mov ah,9
+ 0751  B9 0054				mov cx,lengthof Quest11-1
+ 0754  B3 0A				mov bl,0Ah
+ 0756  CD 10				int 10h
+ 0758  66| 61				popad
+					print Quest11
+ 075A  BA 0213 R	     1		MOV DX,OFFSET Quest11
+ 075D  B4 09		     1		MOV AH,9
+ 075F  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					
+					newline
+ 0761  B4 02		     1		mov ah,2
+ 0763  B2 0A		     1		mov dl,0ah
+ 0765  CD 21		     1		int 21h
+ 0767  B2 0D		     1		mov dl,0dh
+ 0769  CD 21		     1		int 21h
+ 076B  B2 0D		     1		mov dl,0dh
+ 076D  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 076F  66| 60				pushad
+ 0771  B4 09				mov ah,9
+ 0773  B9 0027				mov cx,lengthof Mcq_Quest11-1
+ 0776  B3 0A				mov bl,0Ah
+ 0778  CD 10				int 10h
+ 077A  66| 61				popad
+					print Mcq_Quest11
+ 077C  BA 0268 R	     1		MOV DX,OFFSET Mcq_Quest11
+ 077F  B4 09		     1		MOV AH,9
+ 0781  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+						newline
+ 0783  B4 02		     1		mov ah,2
+ 0785  B2 0A		     1		mov dl,0ah
+ 0787  CD 21		     1		int 21h
+ 0789  B2 0D		     1		mov dl,0dh
+ 078B  CD 21		     1		int 21h
+ 078D  B2 0D		     1		mov dl,0dh
+ 078F  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					
+					
+					;------------user input ------------------
+
+					input
+ 0791  B4 01		     1		mov ah,1
+ 0793  CD 21		     1		int 21h
+					;------------------------------------------------
+					
+ 0795  3C 63				cmp al,'c'
+ 0797  74 02				je	ri_a			;jump if equal
+ 0799  EB 27				jmp wrong
+					
+ 079B					ri_a:
+ 079B  66| 60				pushad
+ 079D  B4 09				mov ah,9
+ 079F  B9 0017				mov cx,lengthof right_answer-1
+ 07A2  B3 0A				mov bl,0Ah
+ 07A4  CD 10				int 10h
+ 07A6  66| 61				popad
+						print right_answer	
+ 07A8  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 07AB  B4 09		     1		MOV AH,9
+ 07AD  CD 21		     1		int 21h
+ 07AF  80 C1 01					add cl,1
+						newline
+ 07B2  B4 02		     1		mov ah,2
+ 07B4  B2 0A		     1		mov dl,0ah
+ 07B6  CD 21		     1		int 21h
+ 07B8  B2 0D		     1		mov dl,0dh
+ 07BA  CD 21		     1		int 21h
+ 07BC  B2 0D		     1		mov dl,0dh
+ 07BE  CD 21		     1		int 21h
+						
+ 07C0  EB 25					jmp Question1
+					
+ 07C2					wrong:
+ 07C2  80 E9 01					sub cl,1
+ 07C5  66| 60				pushad
+ 07C7  B4 09				mov ah,9
+ 07C9  B9 0016				mov cx,lengthof wrong_answer-1
+ 07CC  B3 0A				mov bl,0Ah
+ 07CE  CD 10				int 10h
+ 07D0  66| 61				popad
+					
+					
+						print wrong_answer
+ 07D2  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 07D5  B4 09		     1		MOV AH,9
+ 07D7  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					
+					newline
+ 07D9  B4 02		     1		mov ah,2
+ 07DB  B2 0A		     1		mov dl,0ah
+ 07DD  CD 21		     1		int 21h
+ 07DF  B2 0D		     1		mov dl,0dh
+ 07E1  CD 21		     1		int 21h
+ 07E3  B2 0D		     1		mov dl,0dh
+ 07E5  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+						
+ 07E7					Question1:
+ 07E7  66| 60				pushad
+ 07E9  B4 09				mov ah,9
+ 07EB  B9 0039				mov cx,lengthof Quest12-1
+ 07EE  B3 0A				mov bl,0Ah
+ 07F0  CD 10				int 10h
+ 07F2  66| 61				popad
+					print Quest12
+ 07F4  BA 0290 R	     1		MOV DX,OFFSET Quest12
+ 07F7  B4 09		     1		MOV AH,9
+ 07F9  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 07FB  B4 02		     1		mov ah,2
+ 07FD  B2 0A		     1		mov dl,0ah
+ 07FF  CD 21		     1		int 21h
+ 0801  B2 0D		     1		mov dl,0dh
+ 0803  CD 21		     1		int 21h
+ 0805  B2 0D		     1		mov dl,0dh
+ 0807  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 0809  66| 60				pushad
+ 080B  B4 09				mov ah,9
+ 080D  B9 0033				mov cx,lengthof Mcq_Quest12-1
+ 0810  B3 0A				mov bl,0Ah
+ 0812  CD 10				int 10h
+ 0814  66| 61				popad
+						
+					print Mcq_Quest12
+ 0816  BA 02CA R	     1		MOV DX,OFFSET Mcq_Quest12
+ 0819  B4 09		     1		MOV AH,9
+ 081B  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 081D  B4 02		     1		mov ah,2
+ 081F  B2 0A		     1		mov dl,0ah
+ 0821  CD 21		     1		int 21h
+ 0823  B2 0D		     1		mov dl,0dh
+ 0825  CD 21		     1		int 21h
+ 0827  B2 0D		     1		mov dl,0dh
+ 0829  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+					input
+ 082B  B4 01		     1		mov ah,1
+ 082D  CD 21		     1		int 21h
+					;----------------------------------------------------------
+
+						
+ 082F  3C 62				cmp al,'b'
+ 0831  74 02					je ri_a2
+ 0833  EB 27					jmp wrong2
+						
+
+ 0835					ri_a2:
+ 0835  66| 60				pushad
+ 0837  B4 09				mov ah,9
+ 0839  B9 0017				mov cx,lengthof right_answer-1
+ 083C  B3 0A				mov bl,0Ah
+ 083E  CD 10				int 10h
+ 0840  66| 61				popad
+						print right_answer
+ 0842  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 0845  B4 09		     1		MOV AH,9
+ 0847  CD 21		     1		int 21h
+ 0849  80 C1 01					add cl,1
+					;-----------new line + next line----------------------------
+
+					newline
+ 084C  B4 02		     1		mov ah,2
+ 084E  B2 0A		     1		mov dl,0ah
+ 0850  CD 21		     1		int 21h
+ 0852  B2 0D		     1		mov dl,0dh
+ 0854  CD 21		     1		int 21h
+ 0856  B2 0D		     1		mov dl,0dh
+ 0858  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+
+ 085A  EB 25					jmp Question3
+					
+					
+					
+ 085C					wrong2:
+ 085C  80 E9 01					sub cl,1
+						
+ 085F  66| 60				pushad
+ 0861  B4 09				mov ah,9
+ 0863  B9 0016				mov cx,lengthof wrong_answer-1
+ 0866  B3 0A				mov bl,0Ah
+ 0868  CD 10				int 10h
+ 086A  66| 61				popad
+					
+						print wrong_answer
+ 086C  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 086F  B4 09		     1		MOV AH,9
+ 0871  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					
+						newline
+ 0873  B4 02		     1		mov ah,2
+ 0875  B2 0A		     1		mov dl,0ah
+ 0877  CD 21		     1		int 21h
+ 0879  B2 0D		     1		mov dl,0dh
+ 087B  CD 21		     1		int 21h
+ 087D  B2 0D		     1		mov dl,0dh
+ 087F  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+ 0881					Question3:
+					
+ 0881  66| 60				pushad
+ 0883  B4 09				mov ah,9
+ 0885  B9 0046				mov cx,lengthof Quest13-1
+ 0888  B3 0A				mov bl,0Ah
+ 088A  CD 10				int 10h
+ 088C  66| 61				popad
+
+					print Quest13
+ 088E  BA 02FE R	     1		MOV DX,OFFSET Quest13
+ 0891  B4 09		     1		MOV AH,9
+ 0893  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0895  B4 02		     1		mov ah,2
+ 0897  B2 0A		     1		mov dl,0ah
+ 0899  CD 21		     1		int 21h
+ 089B  B2 0D		     1		mov dl,0dh
+ 089D  CD 21		     1		int 21h
+ 089F  B2 0D		     1		mov dl,0dh
+ 08A1  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+ 08A3  66| 60				pushad
+ 08A5  B4 09				mov ah,9
+ 08A7  B9 0052				mov cx,lengthof Mcq_Quest13-1
+ 08AA  B3 0A				mov bl,0Ah
+ 08AC  CD 10				int 10h
+ 08AE  66| 61				popad
+					print Mcq_Quest13
+ 08B0  BA 0345 R	     1		MOV DX,OFFSET Mcq_Quest13
+ 08B3  B4 09		     1		MOV AH,9
+ 08B5  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 08B7  B4 02		     1		mov ah,2
+ 08B9  B2 0A		     1		mov dl,0ah
+ 08BB  CD 21		     1		int 21h
+ 08BD  B2 0D		     1		mov dl,0dh
+ 08BF  CD 21		     1		int 21h
+ 08C1  B2 0D		     1		mov dl,0dh
+ 08C3  CD 21		     1		int 21h
+					;----------------------------------------------------------
+
+					input	
+ 08C5  B4 01		     1		mov ah,1
+ 08C7  CD 21		     1		int 21h
+					
+ 08C9  3C 61				cmp al,'a'
+ 08CB  74 02					je ri_a3
+ 08CD  EB 27					jmp wrong3
+						
+ 08CF					ri_a3:
+ 08CF  66| 60				pushad
+ 08D1  B4 09				mov ah,9
+ 08D3  B9 0017				mov cx,lengthof right_answer-1
+ 08D6  B3 0A				mov bl,0Ah
+ 08D8  CD 10				int 10h
+ 08DA  66| 61				popad
+
+					print right_answer
+ 08DC  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 08DF  B4 09		     1		MOV AH,9
+ 08E1  CD 21		     1		int 21h
+ 08E3  80 C1 01				add cl,1
+					;-----------new line + next line----------------------------
+					newline
+ 08E6  B4 02		     1		mov ah,2
+ 08E8  B2 0A		     1		mov dl,0ah
+ 08EA  CD 21		     1		int 21h
+ 08EC  B2 0D		     1		mov dl,0dh
+ 08EE  CD 21		     1		int 21h
+ 08F0  B2 0D		     1		mov dl,0dh
+ 08F2  CD 21		     1		int 21h
+					;----------------------------------------------------------
+
+ 08F4  EB 25					jmp Question4
+					
+					
+					
+ 08F6					wrong3:
+ 08F6  80 E9 01				sub cl,1
+						
+ 08F9  66| 60				pushad
+ 08FB  B4 09				mov ah,9
+ 08FD  B9 0016				mov cx,lengthof wrong_answer-1
+ 0900  B3 0A				mov bl,0Ah
+ 0902  CD 10				int 10h
+ 0904  66| 61				popad
+					print wrong_answer
+ 0906  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0909  B4 09		     1		MOV AH,9
+ 090B  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 090D  B4 02		     1		mov ah,2
+ 090F  B2 0A		     1		mov dl,0ah
+ 0911  CD 21		     1		int 21h
+ 0913  B2 0D		     1		mov dl,0dh
+ 0915  CD 21		     1		int 21h
+ 0917  B2 0D		     1		mov dl,0dh
+ 0919  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 091B					Question4:
+					
+ 091B  66| 60				pushad
+ 091D  B4 09				mov ah,9
+ 091F  B9 0077				mov cx,lengthof Quest14-1
+ 0922  B3 0A				mov bl,0Ah
+ 0924  CD 10				int 10h
+ 0926  66| 61				popad
+					print Quest14
+ 0928  BA 0398 R	     1		MOV DX,OFFSET Quest14
+ 092B  B4 09		     1		MOV AH,9
+ 092D  CD 21		     1		int 21h
+					
+					;-----------new line + next line----------------------------
+					newline
+ 092F  B4 02		     1		mov ah,2
+ 0931  B2 0A		     1		mov dl,0ah
+ 0933  CD 21		     1		int 21h
+ 0935  B2 0D		     1		mov dl,0dh
+ 0937  CD 21		     1		int 21h
+ 0939  B2 0D		     1		mov dl,0dh
+ 093B  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+						
+ 093D  66| 60				pushad
+ 093F  B4 09				mov ah,9
+ 0941  B9 002B				mov cx,lengthof Mcq_Quest14-1
+ 0944  B3 0A				mov bl,0Ah
+ 0946  CD 10				int 10h
+ 0948  66| 61				popad
+					print Mcq_Quest14
+ 094A  BA 0410 R	     1		MOV DX,OFFSET Mcq_Quest14
+ 094D  B4 09		     1		MOV AH,9
+ 094F  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0951  B4 02		     1		mov ah,2
+ 0953  B2 0A		     1		mov dl,0ah
+ 0955  CD 21		     1		int 21h
+ 0957  B2 0D		     1		mov dl,0dh
+ 0959  CD 21		     1		int 21h
+ 095B  B2 0D		     1		mov dl,0dh
+ 095D  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					input	
+ 095F  B4 01		     1		mov ah,1
+ 0961  CD 21		     1		int 21h
+ 0963  3C 62				cmp al,'b'
+ 0965  74 02					je ri_a4
+ 0967  EB 27					jmp wrong4
+						
+ 0969					ri_a4:
+ 0969  66| 60				pushad
+ 096B  B4 09				mov ah,9
+ 096D  B9 0017				mov cx,lengthof right_answer-1
+ 0970  B3 0A				mov bl,0Ah
+ 0972  CD 10				int 10h
+ 0974  66| 61				popad
+					print right_answer
+ 0976  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 0979  B4 09		     1		MOV AH,9
+ 097B  CD 21		     1		int 21h
+ 097D  80 C1 01				add cl,1
+					;-----------new line + next line----------------------------
+					newline
+ 0980  B4 02		     1		mov ah,2
+ 0982  B2 0A		     1		mov dl,0ah
+ 0984  CD 21		     1		int 21h
+ 0986  B2 0D		     1		mov dl,0dh
+ 0988  CD 21		     1		int 21h
+ 098A  B2 0D		     1		mov dl,0dh
+ 098C  CD 21		     1		int 21h
+					;----------------------------------------------------------
+
+ 098E  EB 25					jmp Question5
+						
+ 0990					wrong4:
+ 0990  80 E9 01				sub cl,1
+					
+ 0993  66| 60				pushad
+ 0995  B4 09				mov ah,9
+ 0997  B9 0016				mov cx,lengthof wrong_answer-1
+ 099A  B3 0A				mov bl,0Ah
+ 099C  CD 10				int 10h
+ 099E  66| 61				popad
+					
+					
+					print wrong_answer
+ 09A0  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 09A3  B4 09		     1		MOV AH,9
+ 09A5  CD 21		     1		int 21h
+					;;-----------new line + next line----------------------------
+						newline
+ 09A7  B4 02		     1		mov ah,2
+ 09A9  B2 0A		     1		mov dl,0ah
+ 09AB  CD 21		     1		int 21h
+ 09AD  B2 0D		     1		mov dl,0dh
+ 09AF  CD 21		     1		int 21h
+ 09B1  B2 0D		     1		mov dl,0dh
+ 09B3  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 09B5					Question5:
+ 09B5  66| 60				pushad
+ 09B7  B4 09				mov ah,9
+ 09B9  B9 0030				mov cx,lengthof Quest15-1
+ 09BC  B3 0A				mov bl,0Ah
+ 09BE  CD 10				int 10h
+ 09C0  66| 61				popad
+					
+					print Quest15
+ 09C2  BA 043C R	     1		MOV DX,OFFSET Quest15
+ 09C5  B4 09		     1		MOV AH,9
+ 09C7  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 09C9  B4 02		     1		mov ah,2
+ 09CB  B2 0A		     1		mov dl,0ah
+ 09CD  CD 21		     1		int 21h
+ 09CF  B2 0D		     1		mov dl,0dh
+ 09D1  CD 21		     1		int 21h
+ 09D3  B2 0D		     1		mov dl,0dh
+ 09D5  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 09D7  66| 60				pushad
+ 09D9  B4 09				mov ah,9
+ 09DB  B9 0045				mov cx,lengthof Mcq_Quest15-1
+ 09DE  B3 0A				mov bl,0Ah
+ 09E0  CD 10				int 10h
+ 09E2  66| 61				popad
+					print Mcq_Quest15
+ 09E4  BA 046D R	     1		MOV DX,OFFSET Mcq_Quest15
+ 09E7  B4 09		     1		MOV AH,9
+ 09E9  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline 
+ 09EB  B4 02		     1		mov ah,2
+ 09ED  B2 0A		     1		mov dl,0ah
+ 09EF  CD 21		     1		int 21h
+ 09F1  B2 0D		     1		mov dl,0dh
+ 09F3  CD 21		     1		int 21h
+ 09F5  B2 0D		     1		mov dl,0dh
+ 09F7  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					input	
+ 09F9  B4 01		     1		mov ah,1
+ 09FB  CD 21		     1		int 21h
+ 09FD  3C 63				cmp al,'c'
+ 09FF  74 02					je ri_a5
+ 0A01  EB 27					jmp wrong5
+						
+ 0A03					ri_a5:
+ 0A03  66| 60				pushad
+ 0A05  B4 09				mov ah,9
+ 0A07  B9 0017				mov cx,lengthof right_answer-1
+ 0A0A  B3 0A				mov bl,0Ah
+ 0A0C  CD 10				int 10h
+ 0A0E  66| 61				popad	
+
+					print right_answer
+ 0A10  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 0A13  B4 09		     1		MOV AH,9
+ 0A15  CD 21		     1		int 21h
+ 0A17  80 C1 01				add cl,1
+					;-----------new line + next line----------------------------
+					newline
+ 0A1A  B4 02		     1		mov ah,2
+ 0A1C  B2 0A		     1		mov dl,0ah
+ 0A1E  CD 21		     1		int 21h
+ 0A20  B2 0D		     1		mov dl,0dh
+ 0A22  CD 21		     1		int 21h
+ 0A24  B2 0D		     1		mov dl,0dh
+ 0A26  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+
+ 0A28  EB 25					jmp Question6
+					
+					
+					
+ 0A2A					wrong5:
+ 0A2A  80 E9 01				sub cl,1
+					
+ 0A2D  66| 60				pushad
+ 0A2F  B4 09				mov ah,9
+ 0A31  B9 0016				mov cx,lengthof wrong_answer-1
+ 0A34  B3 0A				mov bl,0Ah
+ 0A36  CD 10				int 10h
+ 0A38  66| 61				popad
+					
+					print wrong_answer
+ 0A3A  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0A3D  B4 09		     1		MOV AH,9
+ 0A3F  CD 21		     1		int 21h
+					;;-----------new line + next line----------------------------
+
+					newline
+ 0A41  B4 02		     1		mov ah,2
+ 0A43  B2 0A		     1		mov dl,0ah
+ 0A45  CD 21		     1		int 21h
+ 0A47  B2 0D		     1		mov dl,0dh
+ 0A49  CD 21		     1		int 21h
+ 0A4B  B2 0D		     1		mov dl,0dh
+ 0A4D  CD 21		     1		int 21h
+						
+ 0A4F					Question6:
+ 0A4F  66| 60				pushad
+ 0A51  B4 09				mov ah,9
+ 0A53  B9 004F				mov cx,lengthof Quest16-1
+ 0A56  B3 0A				mov bl,0Ah
+ 0A58  CD 10				int 10h
+ 0A5A  66| 61				popad
+					print Quest16
+ 0A5C  BA 04B3 R	     1		MOV DX,OFFSET Quest16
+ 0A5F  B4 09		     1		MOV AH,9
+ 0A61  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0A63  B4 02		     1		mov ah,2
+ 0A65  B2 0A		     1		mov dl,0ah
+ 0A67  CD 21		     1		int 21h
+ 0A69  B2 0D		     1		mov dl,0dh
+ 0A6B  CD 21		     1		int 21h
+ 0A6D  B2 0D		     1		mov dl,0dh
+ 0A6F  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 0A71  66| 60				pushad
+ 0A73  B4 09				mov ah,9
+ 0A75  B9 0032				mov cx,lengthof Mcq_Quest16-1
+ 0A78  B3 0A				mov bl,0Ah
+ 0A7A  CD 10				int 10h
+ 0A7C  66| 61				popad
+					print Mcq_Quest16
+ 0A7E  BA 0503 R	     1		MOV DX,OFFSET Mcq_Quest16
+ 0A81  B4 09		     1		MOV AH,9
+ 0A83  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0A85  B4 02		     1		mov ah,2
+ 0A87  B2 0A		     1		mov dl,0ah
+ 0A89  CD 21		     1		int 21h
+ 0A8B  B2 0D		     1		mov dl,0dh
+ 0A8D  CD 21		     1		int 21h
+ 0A8F  B2 0D		     1		mov dl,0dh
+ 0A91  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					input	
+ 0A93  B4 01		     1		mov ah,1
+ 0A95  CD 21		     1		int 21h
+ 0A97  3C 61				cmp al,'a'
+ 0A99  74 02					je ri_a6
+ 0A9B  EB 27					jmp wrong6
+						
+ 0A9D					ri_a6:
+					
+ 0A9D  66| 60				pushad
+ 0A9F  B4 09				mov ah,9
+ 0AA1  B9 0016				mov cx,lengthof wrong_answer-1
+ 0AA4  B3 0A				mov bl,0Ah
+ 0AA6  CD 10				int 10h
+ 0AA8  66| 61				popad
+					
+					
+					print wrong_answer
+ 0AAA  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0AAD  B4 09		     1		MOV AH,9
+ 0AAF  CD 21		     1		int 21h
+ 0AB1  80 C1 01				add cl,1
+					;-----------new line + next line----------------------------
+
+					newline
+ 0AB4  B4 02		     1		mov ah,2
+ 0AB6  B2 0A		     1		mov dl,0ah
+ 0AB8  CD 21		     1		int 21h
+ 0ABA  B2 0D		     1		mov dl,0dh
+ 0ABC  CD 21		     1		int 21h
+ 0ABE  B2 0D		     1		mov dl,0dh
+ 0AC0  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+
+ 0AC2  EB 25					jmp Question7
+					
+					
+					
+ 0AC4					wrong6:
+ 0AC4  80 E9 01				sub cl,1
+					
+ 0AC7  66| 60				pushad
+ 0AC9  B4 09				mov ah,9
+ 0ACB  B9 0016				mov cx,lengthof wrong_answer-1
+ 0ACE  B3 0A				mov bl,0Ah
+ 0AD0  CD 10				int 10h
+ 0AD2  66| 61				popad
+					
+					print wrong_answer
+ 0AD4  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0AD7  B4 09		     1		MOV AH,9
+ 0AD9  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0ADB  B4 02		     1		mov ah,2
+ 0ADD  B2 0A		     1		mov dl,0ah
+ 0ADF  CD 21		     1		int 21h
+ 0AE1  B2 0D		     1		mov dl,0dh
+ 0AE3  CD 21		     1		int 21h
+ 0AE5  B2 0D		     1		mov dl,0dh
+ 0AE7  CD 21		     1		int 21h
+
+ 0AE9					Question7:
+
+ 0AE9  66| 60				pushad
+ 0AEB  B4 09				mov ah,9
+ 0AED  B9 0022				mov cx,lengthof Quest17-1
+ 0AF0  B3 0A				mov bl,0Ah
+ 0AF2  CD 10				int 10h
+ 0AF4  66| 61				popad
+					print Quest17
+ 0AF6  BA 0536 R	     1		MOV DX,OFFSET Quest17
+ 0AF9  B4 09		     1		MOV AH,9
+ 0AFB  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0AFD  B4 02		     1		mov ah,2
+ 0AFF  B2 0A		     1		mov dl,0ah
+ 0B01  CD 21		     1		int 21h
+ 0B03  B2 0D		     1		mov dl,0dh
+ 0B05  CD 21		     1		int 21h
+ 0B07  B2 0D		     1		mov dl,0dh
+ 0B09  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+					
+ 0B0B  66| 60				pushad
+ 0B0D  B4 09				mov ah,9
+ 0B0F  B9 0050				mov cx,lengthof Mcq_Quest17-1
+ 0B12  B3 0A				mov bl,0Ah
+ 0B14  CD 10				int 10h
+ 0B16  66| 61				popad
+					print  Mcq_Quest17
+ 0B18  BA 0559 R	     1		MOV DX,OFFSET Mcq_Quest17
+ 0B1B  B4 09		     1		MOV AH,9
+ 0B1D  CD 21		     1		int 21h
+					;;-----------new line + next line----------------------------
+					;newline
+					;;----------------------------------------------------------
+					input	
+ 0B1F  B4 01		     1		mov ah,1
+ 0B21  CD 21		     1		int 21h
+ 0B23  3C 63				cmp al,'c'
+ 0B25  74 02					je ri_a7
+ 0B27  EB 27					jmp wrong7
+						
+ 0B29					ri_a7:
+					
+ 0B29  66| 60				pushad
+ 0B2B  B4 09				mov ah,9
+ 0B2D  B9 0016				mov cx,lengthof wrong_answer-1
+ 0B30  B3 0A				mov bl,0Ah
+ 0B32  CD 10				int 10h
+ 0B34  66| 61				popad
+					
+					print wrong_answer
+ 0B36  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0B39  B4 09		     1		MOV AH,9
+ 0B3B  CD 21		     1		int 21h
+ 0B3D  80 C1 01				add cl,1
+					;-----------new line + next line----------------------------
+					newline
+ 0B40  B4 02		     1		mov ah,2
+ 0B42  B2 0A		     1		mov dl,0ah
+ 0B44  CD 21		     1		int 21h
+ 0B46  B2 0D		     1		mov dl,0dh
+ 0B48  CD 21		     1		int 21h
+ 0B4A  B2 0D		     1		mov dl,0dh
+ 0B4C  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+
+ 0B4E  EB 25					jmp Question8
+					
+					
+					
+ 0B50					wrong7:
+ 0B50  80 E9 01				sub cl,1
+					
+ 0B53  66| 60				pushad
+ 0B55  B4 09				mov ah,9
+ 0B57  B9 0016				mov cx,lengthof wrong_answer-1
+ 0B5A  B3 0A				mov bl,0Ah
+ 0B5C  CD 10				int 10h
+ 0B5E  66| 61				popad
+					
+					print wrong_answer
+ 0B60  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0B63  B4 09		     1		MOV AH,9
+ 0B65  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0B67  B4 02		     1		mov ah,2
+ 0B69  B2 0A		     1		mov dl,0ah
+ 0B6B  CD 21		     1		int 21h
+ 0B6D  B2 0D		     1		mov dl,0dh
+ 0B6F  CD 21		     1		int 21h
+ 0B71  B2 0D		     1		mov dl,0dh
+ 0B73  CD 21		     1		int 21h
+ 0B75					Question8:
+					
+ 0B75  66| 60				pushad
+ 0B77  B4 09				mov ah,9
+ 0B79  B9 0027				mov cx,lengthof Quest18-1
+ 0B7C  B3 0A				mov bl,0Ah
+ 0B7E  CD 10				int 10h
+ 0B80  66| 61				popad
+					print Quest18
+ 0B82  BA 05AA R	     1		MOV DX,OFFSET Quest18
+ 0B85  B4 09		     1		MOV AH,9
+ 0B87  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0B89  B4 02		     1		mov ah,2
+ 0B8B  B2 0A		     1		mov dl,0ah
+ 0B8D  CD 21		     1		int 21h
+ 0B8F  B2 0D		     1		mov dl,0dh
+ 0B91  CD 21		     1		int 21h
+ 0B93  B2 0D		     1		mov dl,0dh
+ 0B95  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 0B97  66| 60				pushad
+ 0B99  B4 09				mov ah,9
+ 0B9B  B9 0030				mov cx,lengthof Mcq_Quest18-1
+ 0B9E  B3 0A				mov bl,0Ah
+ 0BA0  CD 10				int 10h
+ 0BA2  66| 61				popad
+					print Mcq_Quest18
+ 0BA4  BA 05D2 R	     1		MOV DX,OFFSET Mcq_Quest18
+ 0BA7  B4 09		     1		MOV AH,9
+ 0BA9  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0BAB  B4 02		     1		mov ah,2
+ 0BAD  B2 0A		     1		mov dl,0ah
+ 0BAF  CD 21		     1		int 21h
+ 0BB1  B2 0D		     1		mov dl,0dh
+ 0BB3  CD 21		     1		int 21h
+ 0BB5  B2 0D		     1		mov dl,0dh
+ 0BB7  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					input	
+ 0BB9  B4 01		     1		mov ah,1
+ 0BBB  CD 21		     1		int 21h
+
+ 0BBD  3C 63				cmp al,'c'
+ 0BBF  74 02					je ri_a8
+ 0BC1  EB 27					jmp wrong8
+						
+ 0BC3					ri_a8:
+ 0BC3  66| 60				pushad
+ 0BC5  B4 09				mov ah,9
+ 0BC7  B9 0017				mov cx,lengthof right_answer-1
+ 0BCA  B3 0A				mov bl,0Ah
+ 0BCC  CD 10				int 10h
+ 0BCE  66| 61				popad
+					
+					print right_answer
+ 0BD0  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 0BD3  B4 09		     1		MOV AH,9
+ 0BD5  CD 21		     1		int 21h
+ 0BD7  80 C1 01				add cl,1
+					;-----------new line + next line----------------------------
+					newline
+ 0BDA  B4 02		     1		mov ah,2
+ 0BDC  B2 0A		     1		mov dl,0ah
+ 0BDE  CD 21		     1		int 21h
+ 0BE0  B2 0D		     1		mov dl,0dh
+ 0BE2  CD 21		     1		int 21h
+ 0BE4  B2 0D		     1		mov dl,0dh
+ 0BE6  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+
+ 0BE8  EB 25					jmp Question9
+					
+					
+					
+ 0BEA					wrong8:
+ 0BEA  80 E9 01				sub cl,1
+					
+ 0BED  66| 60				pushad
+ 0BEF  B4 09				mov ah,9
+ 0BF1  B9 0016				mov cx,lengthof wrong_answer-1
+ 0BF4  B3 0A				mov bl,0Ah
+ 0BF6  CD 10				int 10h
+ 0BF8  66| 61				popad
+					
+					print wrong_answer
+ 0BFA  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0BFD  B4 09		     1		MOV AH,9
+ 0BFF  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0C01  B4 02		     1		mov ah,2
+ 0C03  B2 0A		     1		mov dl,0ah
+ 0C05  CD 21		     1		int 21h
+ 0C07  B2 0D		     1		mov dl,0dh
+ 0C09  CD 21		     1		int 21h
+ 0C0B  B2 0D		     1		mov dl,0dh
+ 0C0D  CD 21		     1		int 21h
+ 0C0F					Question9:
+ 0C0F  66| 60				pushad
+ 0C11  B4 09				mov ah,9
+ 0C13  B9 0023				mov cx,lengthof Quest19-1
+ 0C16  B3 0A				mov bl,0Ah
+ 0C18  CD 10				int 10h
+ 0C1A  66| 61				popad
+					print Quest19
+ 0C1C  BA 0603 R	     1		MOV DX,OFFSET Quest19
+ 0C1F  B4 09		     1		MOV AH,9
+ 0C21  CD 21		     1		int 21h
+					newline
+ 0C23  B4 02		     1		mov ah,2
+ 0C25  B2 0A		     1		mov dl,0ah
+ 0C27  CD 21		     1		int 21h
+ 0C29  B2 0D		     1		mov dl,0dh
+ 0C2B  CD 21		     1		int 21h
+ 0C2D  B2 0D		     1		mov dl,0dh
+ 0C2F  CD 21		     1		int 21h
+					 
+ 0C31  66| 60				pushad
+ 0C33  B4 09				mov ah,9
+ 0C35  B9 002E				mov cx,lengthof Mcq_Quest19-1
+ 0C38  B3 0A				mov bl,0Ah
+ 0C3A  CD 10				int 10h
+ 0C3C  66| 61				popad
+					print Mcq_Quest19
+ 0C3E  BA 0627 R	     1		MOV DX,OFFSET Mcq_Quest19
+ 0C41  B4 09		     1		MOV AH,9
+ 0C43  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+
+					newline
+ 0C45  B4 02		     1		mov ah,2
+ 0C47  B2 0A		     1		mov dl,0ah
+ 0C49  CD 21		     1		int 21h
+ 0C4B  B2 0D		     1		mov dl,0dh
+ 0C4D  CD 21		     1		int 21h
+ 0C4F  B2 0D		     1		mov dl,0dh
+ 0C51  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					input	
+ 0C53  B4 01		     1		mov ah,1
+ 0C55  CD 21		     1		int 21h
+ 0C57  3C 63				cmp al,'c'
+ 0C59  74 02					je ri_a9
+ 0C5B  EB 27					jmp wrong9
+						
+ 0C5D					ri_a9:
+ 0C5D  66| 60				pushad
+ 0C5F  B4 09				mov ah,9
+ 0C61  B9 0017				mov cx,lengthof right_answer-1
+ 0C64  B3 0A				mov bl,0Ah
+ 0C66  CD 10				int 10h
+ 0C68  66| 61				popad
+					print right_answer
+ 0C6A  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 0C6D  B4 09		     1		MOV AH,9
+ 0C6F  CD 21		     1		int 21h
+ 0C71  80 C1 01				add cl,1
+					;-----------new line + next line----------------------------
+					newline
+ 0C74  B4 02		     1		mov ah,2
+ 0C76  B2 0A		     1		mov dl,0ah
+ 0C78  CD 21		     1		int 21h
+ 0C7A  B2 0D		     1		mov dl,0dh
+ 0C7C  CD 21		     1		int 21h
+ 0C7E  B2 0D		     1		mov dl,0dh
+ 0C80  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+
+ 0C82  EB 25					jmp Question10	
+					
+ 0C84					wrong9:
+ 0C84  80 E9 01				sub cl,1
+					
+ 0C87  66| 60				pushad
+ 0C89  B4 09				mov ah,9
+ 0C8B  B9 0016				mov cx,lengthof wrong_answer-1
+ 0C8E  B3 0A				mov bl,0Ah
+ 0C90  CD 10				int 10h
+ 0C92  66| 61				popad
+					
+					print wrong_answer
+ 0C94  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0C97  B4 09		     1		MOV AH,9
+ 0C99  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					
+					newline	
+ 0C9B  B4 02		     1		mov ah,2
+ 0C9D  B2 0A		     1		mov dl,0ah
+ 0C9F  CD 21		     1		int 21h
+ 0CA1  B2 0D		     1		mov dl,0dh
+ 0CA3  CD 21		     1		int 21h
+ 0CA5  B2 0D		     1		mov dl,0dh
+ 0CA7  CD 21		     1		int 21h
+						
+ 0CA9					Question10:
+ 0CA9  66| 60				pushad
+ 0CAB  B4 09				mov ah,9
+ 0CAD  B9 0038				mov cx,lengthof Quest20-1
+ 0CB0  B3 0A				mov bl,0Ah
+ 0CB2  CD 10				int 10h
+ 0CB4  66| 61				popad
+						print Quest20
+ 0CB6  BA 0656 R	     1		MOV DX,OFFSET Quest20
+ 0CB9  B4 09		     1		MOV AH,9
+ 0CBB  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+						newline
+ 0CBD  B4 02		     1		mov ah,2
+ 0CBF  B2 0A		     1		mov dl,0ah
+ 0CC1  CD 21		     1		int 21h
+ 0CC3  B2 0D		     1		mov dl,0dh
+ 0CC5  CD 21		     1		int 21h
+ 0CC7  B2 0D		     1		mov dl,0dh
+ 0CC9  CD 21		     1		int 21h
+					;----------------------------------------------------------
+ 0CCB  66| 60				pushad
+ 0CCD  B4 09				mov ah,9
+ 0CCF  B9 0030				mov cx,lengthof Mcq_Quest20-1
+ 0CD2  B3 0A				mov bl,0Ah
+ 0CD4  CD 10				int 10h
+ 0CD6  66| 61				popad
+					print Mcq_Quest20
+ 0CD8  BA 068F R	     1		MOV DX,OFFSET Mcq_Quest20
+ 0CDB  B4 09		     1		MOV AH,9
+ 0CDD  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0CDF  B4 02		     1		mov ah,2
+ 0CE1  B2 0A		     1		mov dl,0ah
+ 0CE3  CD 21		     1		int 21h
+ 0CE5  B2 0D		     1		mov dl,0dh
+ 0CE7  CD 21		     1		int 21h
+ 0CE9  B2 0D		     1		mov dl,0dh
+ 0CEB  CD 21		     1		int 21h
+					;----------------------------------------------------------
+					input	
+ 0CED  B4 01		     1		mov ah,1
+ 0CEF  CD 21		     1		int 21h
+ 0CF1  3C 62				cmp al,'b'
+ 0CF3  74 02					je ri_a10
+ 0CF5  EB 27					jmp wrong10
+						
+ 0CF7					ri_a10:
+ 0CF7  66| 60				pushad
+ 0CF9  B4 09				mov ah,9
+ 0CFB  B9 0017				mov cx,lengthof right_answer-1
+ 0CFE  B3 0A				mov bl,0Ah
+ 0D00  CD 10				int 10h
+ 0D02  66| 61				popad
+					print right_answer
+ 0D04  BA 01E3 R	     1		MOV DX,OFFSET right_answer
+ 0D07  B4 09		     1		MOV AH,9
+ 0D09  CD 21		     1		int 21h
+ 0D0B  80 C1 01				add cl,1
+					;-----------new line + next line----------------------------
+					newline
+ 0D0E  B4 02		     1		mov ah,2
+ 0D10  B2 0A		     1		mov dl,0ah
+ 0D12  CD 21		     1		int 21h
+ 0D14  B2 0D		     1		mov dl,0dh
+ 0D16  CD 21		     1		int 21h
+ 0D18  B2 0D		     1		mov dl,0dh
+ 0D1A  CD 21		     1		int 21h
+					;;----------------------------------------------------------
+
+ 0D1C  EB 25					jmp Question11
+						
+						
+ 0D1E					wrong10:
+ 0D1E  80 E9 01				sub cl,1
+					
+ 0D21  66| 60				pushad
+ 0D23  B4 09				mov ah,9
+ 0D25  B9 0016				mov cx,lengthof wrong_answer-1
+ 0D28  B3 0A				mov bl,0Ah
+ 0D2A  CD 10				int 10h
+ 0D2C  66| 61				popad
+					
+					
+					print wrong_answer
+ 0D2E  BA 01FB R	     1		MOV DX,OFFSET wrong_answer
+ 0D31  B4 09		     1		MOV AH,9
+ 0D33  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0D35  B4 02		     1		mov ah,2
+ 0D37  B2 0A		     1		mov dl,0ah
+ 0D39  CD 21		     1		int 21h
+ 0D3B  B2 0D		     1		mov dl,0dh
+ 0D3D  CD 21		     1		int 21h
+ 0D3F  B2 0D		     1		mov dl,0dh
+ 0D41  CD 21		     1		int 21h
+					;------------------------------------------------------------
+ 0D43					Question11:
+ 0D43  66| 60				pushad
+ 0D45  B4 09				mov ah,9
+ 0D47  B9 0029				mov cx,lengthof ending_2-1
+ 0D4A  B3 0A				mov bl,0Ah
+ 0D4C  CD 10				int 10h
+ 0D4E  66| 61				popad
+					print ending_2
+ 0D50  BA 06EF R	     1		MOV DX,OFFSET ending_2
+ 0D53  B4 09		     1		MOV AH,9
+ 0D55  CD 21		     1		int 21h
+					;-----------new line + next line----------------------------
+					newline
+ 0D57  B4 02		     1		mov ah,2
+ 0D59  B2 0A		     1		mov dl,0ah
+ 0D5B  CD 21		     1		int 21h
+ 0D5D  B2 0D		     1		mov dl,0dh
+ 0D5F  CD 21		     1		int 21h
+ 0D61  B2 0D		     1		mov dl,0dh
+ 0D63  CD 21		     1		int 21h
+					;------------------------------------------------------------
+					
+ 0D65  66| 60				pushad
+ 0D67  B4 09				mov ah,9
+ 0D69  B9 002C				mov cx,lengthof total_marks-1
+ 0D6C  B3 0A				mov bl,0Ah
+ 0D6E  CD 10				int 10h
+ 0D70  66| 61				popad
+					print total_marks
+ 0D72  BA 0750 R	     1		MOV DX,OFFSET total_marks
+ 0D75  B4 09		     1		MOV AH,9
+ 0D77  CD 21		     1		int 21h
+					newline
+ 0D79  B4 02		     1		mov ah,2
+ 0D7B  B2 0A		     1		mov dl,0ah
+ 0D7D  CD 21		     1		int 21h
+ 0D7F  B2 0D		     1		mov dl,0dh
+ 0D81  CD 21		     1		int 21h
+ 0D83  B2 0D		     1		mov dl,0dh
+ 0D85  CD 21		     1		int 21h
+					
+ 0D87  66| 60				pushad
+ 0D89  B4 09				mov ah,9
+ 0D8B  B9 0024				mov cx,lengthof obtain_marks-1
+ 0D8E  B3 0A				mov bl,0Ah
+ 0D90  CD 10				int 10h
+ 0D92  66| 61				popad
+					print obtain_marks
+ 0D94  BA 077D R	     1		MOV DX,OFFSET obtain_marks
+ 0D97  B4 09		     1		MOV AH,9
+ 0D99  CD 21		     1		int 21h
+ 0D9B  66| B8 00000000			mov eax,0
+ 0DA1  8A C1				mov al,cl
+ 0DA3  E8 0000 E			call writedec
+					;-----------------------------------new line---------------------------------
+					newline
+ 0DA6  B4 02		     1		mov ah,2
+ 0DA8  B2 0A		     1		mov dl,0ah
+ 0DAA  CD 21		     1		int 21h
+ 0DAC  B2 0D		     1		mov dl,0dh
+ 0DAE  CD 21		     1		int 21h
+ 0DB0  B2 0D		     1		mov dl,0dh
+ 0DB2  CD 21		     1		int 21h
+					;--------------msg-----------------------------------------------------------
+ 0DB4  66| 60				pushad
+ 0DB6  B4 09				mov ah,9
+ 0DB8  B9 0035				mov cx,lengthof intro_2-1
+ 0DBB  B3 0A				mov bl,0Ah
+ 0DBD  CD 10				int 10h
+ 0DBF  66| 61				popad
+						print intro_2
+ 0DC1  BA 0719 R	     1		MOV DX,OFFSET intro_2
+ 0DC4  B4 09		     1		MOV AH,9
+ 0DC6  CD 21		     1		int 21h
+ 0DC8  C3				ret
+ 0DC9					Assembly_Quizz endp
+					
+					
+				End main
+Microsoft (R) Macro Assembler Version 6.15.8803		    02/06/20 18:20:10
+projects.asm						     Symbols 2 - 1
+
+
+
+
+Macros:
+
+                N a m e                 Type
+
+call_Mouse . . . . . . . . . . .	Proc
+input  . . . . . . . . . . . . .	Proc
+newline  . . . . . . . . . . . .	Proc
+print  . . . . . . . . . . . . .	Proc
+programe_exit  . . . . . . . . .	Proc
+startup  . . . . . . . . . . . .	Proc
+
+
+Structures and Unions:
+
+                N a m e                  Size
+                                         Offset      Type
+
+ExtGetDskFreSpcStruc . . . . . .	 002C
+  StructSize . . . . . . . . . .	 0000	     Word
+  Level  . . . . . . . . . . . .	 0002	     Word
+  SectorsPerCluster  . . . . . .	 0004	     DWord
+  BytesPerSector . . . . . . . .	 0008	     DWord
+  AvailableClusters  . . . . . .	 000C	     DWord
+  TotalClusters  . . . . . . . .	 0010	     DWord
+  AvailablePhysSectors . . . . .	 0014	     DWord
+  TotalPhysSectors . . . . . . .	 0018	     DWord
+  AvailableAllocationUnits . . .	 001C	     DWord
+  TotalAllocationUnits . . . . .	 0020	     DWord
+  Rsvd . . . . . . . . . . . . .	 0024	     DWord
+TimeRecord . . . . . . . . . . .	 0004
+  hours  . . . . . . . . . . . .	 0000	     Byte
+  minutes  . . . . . . . . . . .	 0001	     Byte
+  seconds  . . . . . . . . . . .	 0002	     Byte
+  hhss . . . . . . . . . . . . .	 0003	     Byte
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+DGROUP . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	16 Bit	 0824	  Word	  Public  'DATA'	
+STACK  . . . . . . . . . . . . .	16 Bit	 1000	  Para	  Stack	  'STACK'	 
+_TEXT  . . . . . . . . . . . . .	16 Bit	 0DC9	  Word	  Public  'CODE'	
+
+
+Procedures,  parameters and locals:
+
+                N a m e                 Type     Value    Attr
+
+Assembly_Quizz . . . . . . . . .	P Near	 073B	  _TEXT	Length= 068E Public STDCALL
+  ri_a . . . . . . . . . . . . .	L Near	 079B	  _TEXT	
+  wrong  . . . . . . . . . . . .	L Near	 07C2	  _TEXT	
+  Question1  . . . . . . . . . .	L Near	 07E7	  _TEXT	
+  ri_a2  . . . . . . . . . . . .	L Near	 0835	  _TEXT	
+  wrong2 . . . . . . . . . . . .	L Near	 085C	  _TEXT	
+  Question3  . . . . . . . . . .	L Near	 0881	  _TEXT	
+  ri_a3  . . . . . . . . . . . .	L Near	 08CF	  _TEXT	
+  wrong3 . . . . . . . . . . . .	L Near	 08F6	  _TEXT	
+  Question4  . . . . . . . . . .	L Near	 091B	  _TEXT	
+  ri_a4  . . . . . . . . . . . .	L Near	 0969	  _TEXT	
+  wrong4 . . . . . . . . . . . .	L Near	 0990	  _TEXT	
+  Question5  . . . . . . . . . .	L Near	 09B5	  _TEXT	
+  ri_a5  . . . . . . . . . . . .	L Near	 0A03	  _TEXT	
+  wrong5 . . . . . . . . . . . .	L Near	 0A2A	  _TEXT	
+  Question6  . . . . . . . . . .	L Near	 0A4F	  _TEXT	
+  ri_a6  . . . . . . . . . . . .	L Near	 0A9D	  _TEXT	
+  wrong6 . . . . . . . . . . . .	L Near	 0AC4	  _TEXT	
+  Question7  . . . . . . . . . .	L Near	 0AE9	  _TEXT	
+  ri_a7  . . . . . . . . . . . .	L Near	 0B29	  _TEXT	
+  wrong7 . . . . . . . . . . . .	L Near	 0B50	  _TEXT	
+  Question8  . . . . . . . . . .	L Near	 0B75	  _TEXT	
+  ri_a8  . . . . . . . . . . . .	L Near	 0BC3	  _TEXT	
+  wrong8 . . . . . . . . . . . .	L Near	 0BEA	  _TEXT	
+  Question9  . . . . . . . . . .	L Near	 0C0F	  _TEXT	
+  ri_a9  . . . . . . . . . . . .	L Near	 0C5D	  _TEXT	
+  wrong9 . . . . . . . . . . . .	L Near	 0C84	  _TEXT	
+  Question10 . . . . . . . . . .	L Near	 0CA9	  _TEXT	
+  ri_a10 . . . . . . . . . . . .	L Near	 0CF7	  _TEXT	
+  wrong10  . . . . . . . . . . .	L Near	 0D1E	  _TEXT	
+  Question11 . . . . . . . . . .	L Near	 0D43	  _TEXT	
+ClrScr . . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Crlf . . . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Delay  . . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+DumpMem  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+DumpRegs . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Get_Commandtail  . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Get_Time . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Gotoxy . . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+IsDigit  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Random32 . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+RandomRange  . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Randomize  . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadChar . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadHex  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadInt  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+ReadString . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Str_compare  . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Str_copy . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Str_length . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Str_trim . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+Str_ucase  . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WaitMsg  . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteBin . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteChar  . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteDec . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteHex . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteInt . . . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+WriteString  . . . . . . . . . .	P Near	 0000	  Length= 0000 External STDCALL
+main . . . . . . . . . . . . . .	P Near	 0000	  _TEXT	Length= 00CE Public STDCALL
+  Level  . . . . . . . . . . . .	L Near	 001A	  _TEXT	
+  L3 . . . . . . . . . . . . . .	L Near	 009E	  _TEXT	
+  L1 . . . . . . . . . . . . . .	L Near	 00A4	  _TEXT	
+  L4 . . . . . . . . . . . . . .	L Near	 00B7	  _TEXT	
+  next . . . . . . . . . . . . .	L Near	 00CA	  _TEXT	
+simple_Math_Quizz  . . . . . . .	P Near	 00CE	  _TEXT	Length= 066D Public STDCALL
+  ri_a . . . . . . . . . . . . .	L Near	 0131	  _TEXT	
+  wrong  . . . . . . . . . . . .	L Near	 0155	  _TEXT	
+  Question1  . . . . . . . . . .	L Near	 017A	  _TEXT	
+  ri_a2  . . . . . . . . . . . .	L Near	 01C8	  _TEXT	
+  wrong2 . . . . . . . . . . . .	L Near	 01EC	  _TEXT	
+  Question3  . . . . . . . . . .	L Near	 0211	  _TEXT	
+  ri_a3  . . . . . . . . . . . .	L Near	 025F	  _TEXT	
+  wrong3 . . . . . . . . . . . .	L Near	 0283	  _TEXT	
+  Question4  . . . . . . . . . .	L Near	 02A8	  _TEXT	
+  ri_a4  . . . . . . . . . . . .	L Near	 02F6	  _TEXT	
+  wrong4 . . . . . . . . . . . .	L Near	 031A	  _TEXT	
+  Question5  . . . . . . . . . .	L Near	 033F	  _TEXT	
+  ri_a5  . . . . . . . . . . . .	L Near	 038D	  _TEXT	
+  wrong5 . . . . . . . . . . . .	L Near	 03B1	  _TEXT	
+  Question6  . . . . . . . . . .	L Near	 03D6	  _TEXT	
+  ri_a6  . . . . . . . . . . . .	L Near	 0424	  _TEXT	
+  wrong6 . . . . . . . . . . . .	L Near	 0448	  _TEXT	
+  Question7  . . . . . . . . . .	L Near	 046D	  _TEXT	
+  ri_a7  . . . . . . . . . . . .	L Near	 04BB	  _TEXT	
+  wrong7 . . . . . . . . . . . .	L Near	 04DF	  _TEXT	
+  Question8  . . . . . . . . . .	L Near	 0504	  _TEXT	
+  ri_a8  . . . . . . . . . . . .	L Near	 0552	  _TEXT	
+  wrong8 . . . . . . . . . . . .	L Near	 0576	  _TEXT	
+  Question9  . . . . . . . . . .	L Near	 059B	  _TEXT	
+  ri_a9  . . . . . . . . . . . .	L Near	 05E9	  _TEXT	
+  wrong9 . . . . . . . . . . . .	L Near	 060D	  _TEXT	
+  Question10 . . . . . . . . . .	L Near	 0632	  _TEXT	
+  ri_a10 . . . . . . . . . . . .	L Near	 0680	  _TEXT	
+  wrong10  . . . . . . . . . . .	L Near	 06A4	  _TEXT	
+  Question11 . . . . . . . . . .	L Near	 06C9	  _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 0000h	 
+@DataSize  . . . . . . . . . . .	Number	 0000h	 
+@Interface . . . . . . . . . . .	Number	 0003h	 
+@Model . . . . . . . . . . . . .	Number	 0002h	 
+@cmdline . . . . . . . . . . . .	Text   	 OFFSET __98765765cmdline
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 DGROUP
+@fardata?  . . . . . . . . . . .	Text   	 FAR_BSS
+@fardata . . . . . . . . . . . .	Text   	 FAR_DATA
+@stack . . . . . . . . . . . . .	Text   	 DGROUP
+Mcq_Quest10  . . . . . . . . . .	Byte	 01C0	  _DATA	
+Mcq_Quest11  . . . . . . . . . .	Byte	 0268	  _DATA	
+Mcq_Quest12  . . . . . . . . . .	Byte	 02CA	  _DATA	
+Mcq_Quest13  . . . . . . . . . .	Byte	 0345	  _DATA	
+Mcq_Quest14  . . . . . . . . . .	Byte	 0410	  _DATA	
+Mcq_Quest15  . . . . . . . . . .	Byte	 046D	  _DATA	
+Mcq_Quest16  . . . . . . . . . .	Byte	 0503	  _DATA	
+Mcq_Quest17  . . . . . . . . . .	Byte	 0559	  _DATA	
+Mcq_Quest18  . . . . . . . . . .	Byte	 05D2	  _DATA	
+Mcq_Quest19  . . . . . . . . . .	Byte	 0627	  _DATA	
+Mcq_Quest1 . . . . . . . . . . .	Byte	 000D	  _DATA	
+Mcq_Quest20  . . . . . . . . . .	Byte	 068F	  _DATA	
+Mcq_Quest2 . . . . . . . . . . .	Byte	 003A	  _DATA	
+Mcq_Quest3 . . . . . . . . . . .	Byte	 006A	  _DATA	
+Mcq_Quest4 . . . . . . . . . . .	Byte	 009B	  _DATA	
+Mcq_Quest5 . . . . . . . . . . .	Byte	 00CD	  _DATA	
+Mcq_Quest6 . . . . . . . . . . .	Byte	 00FE	  _DATA	
+Mcq_Quest7 . . . . . . . . . . .	Byte	 012E	  _DATA	
+Mcq_Quest8 . . . . . . . . . . .	Byte	 015E	  _DATA	
+Mcq_Quest9 . . . . . . . . . . .	Byte	 018F	  _DATA	
+Quest10  . . . . . . . . . . . .	Byte	 01B2	  _DATA	
+Quest11  . . . . . . . . . . . .	Byte	 0213	  _DATA	
+Quest12  . . . . . . . . . . . .	Byte	 0290	  _DATA	
+Quest13  . . . . . . . . . . . .	Byte	 02FE	  _DATA	
+Quest14  . . . . . . . . . . . .	Byte	 0398	  _DATA	
+Quest15  . . . . . . . . . . . .	Byte	 043C	  _DATA	
+Quest16  . . . . . . . . . . . .	Byte	 04B3	  _DATA	
+Quest17  . . . . . . . . . . . .	Byte	 0536	  _DATA	
+Quest18  . . . . . . . . . . . .	Byte	 05AA	  _DATA	
+Quest19  . . . . . . . . . . . .	Byte	 0603	  _DATA	
+Quest1 . . . . . . . . . . . . .	Byte	 0000	  _DATA	
+Quest20  . . . . . . . . . . . .	Byte	 0656	  _DATA	
+Quest2 . . . . . . . . . . . . .	Byte	 002E	  _DATA	
+Quest3 . . . . . . . . . . . . .	Byte	 005D	  _DATA	
+Quest4 . . . . . . . . . . . . .	Byte	 008D	  _DATA	
+Quest5 . . . . . . . . . . . . .	Byte	 00BE	  _DATA	
+Quest6 . . . . . . . . . . . . .	Byte	 00F0	  _DATA	
+Quest7 . . . . . . . . . . . . .	Byte	 0121	  _DATA	
+Quest8 . . . . . . . . . . . . .	Byte	 0151	  _DATA	
+Quest9 . . . . . . . . . . . . .	Byte	 0181	  _DATA	
+black  . . . . . . . . . . . . .	Number	 0000h	 
+blue . . . . . . . . . . . . . .	Number	 0001h	 
+brown  . . . . . . . . . . . . .	Number	 0006h	 
+count_Number_2 . . . . . . . . .	Byte	 074F	  _DATA	
+count_Number . . . . . . . . . .	Byte	 0212	  _DATA	
+cyan . . . . . . . . . . . . . .	Number	 0003h	 
+ending_2 . . . . . . . . . . . .	Byte	 06EF	  _DATA	
+exit . . . . . . . . . . . . . .	Text   	 .EXIT
+gray . . . . . . . . . . . . . .	Number	 0008h	 
+green  . . . . . . . . . . . . .	Number	 0002h	 
+intro_2  . . . . . . . . . . . .	Byte	 0719	  _DATA	
+lightBlue  . . . . . . . . . . .	Number	 0009h	 
+lightCyan  . . . . . . . . . . .	Number	 000Bh	 
+lightGray  . . . . . . . . . . .	Number	 0007h	 
+lightGreen . . . . . . . . . . .	Number	 000Ah	 
+lightMagenta . . . . . . . . . .	Number	 000Dh	 
+lightRed . . . . . . . . . . . .	Number	 000Ch	 
+magenta  . . . . . . . . . . . .	Number	 0005h	 
+obtain_marks . . . . . . . . . .	Byte	 077D	  _DATA	
+red  . . . . . . . . . . . . . .	Number	 0004h	 
+right_answer_2 . . . . . . . . .	Byte	 06C0	  _DATA	
+right_answer . . . . . . . . . .	Byte	 01E3	  _DATA	
+select0  . . . . . . . . . . . .	Byte	 07A2	  _DATA	
+select1  . . . . . . . . . . . .	Byte	 07F8	  _DATA	
+select . . . . . . . . . . . . .	Byte	 07CB	  _DATA	
+total_marks  . . . . . . . . . .	Byte	 0750	  _DATA	
+white  . . . . . . . . . . . . .	Number	 000Fh	 
+wrong_answer_2 . . . . . . . . .	Byte	 06D8	  _DATA	
+wrong_answer . . . . . . . . . .	Byte	 01FB	  _DATA	
+yellow . . . . . . . . . . . . .	Number	 000Eh	 
+
+	   0 Warnings
+	   0 Errors
